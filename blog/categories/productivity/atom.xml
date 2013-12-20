@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[jtobin.ca]]></title>
-  <link href="http://jtobin.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: productivity | jtobin.ca]]></title>
+  <link href="http://jtobin.github.io/blog/categories/productivity/atom.xml" rel="self"/>
   <link href="http://jtobin.github.io/"/>
   <updated>2013-12-20T10:59:18+08:00</updated>
   <id>http://jtobin.github.io/</id>
@@ -49,18 +49,6 @@ and I’ve even committed to the official 0MQ bindings for Ruby.  But, I still
 have a lot to learn about it.</p>
 
 <p>So let’s see how it goes.</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A new blog]]></title>
-    <link href="http://jtobin.github.io/blog/2013/12/17/a-new-blog/"/>
-    <updated>2013-12-17T05:46:26+08:00</updated>
-    <id>http://jtobin.github.io/blog/2013/12/17/a-new-blog</id>
-    <content type="html"><![CDATA[<p>I’ve been feeling an itch to write more often, and this seems as good a place
-as any to do it.  If anything here winds up being useful to anyone else, all
-the better.</p>
 
 ]]></content>
   </entry>
