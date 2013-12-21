@@ -1,24 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[jtobin.ca]]></title>
-  <link href="http://jtobin.github.io/atom.xml" rel="self"/>
-  <link href="http://jtobin.github.io/"/>
-  <updated>2013-12-21T16:50:52+08:00</updated>
-  <id>http://jtobin.github.io/</id>
-  <author>
-    <name><![CDATA[Jared Tobin]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Basic EC2 Management with Ansible - jtobin.ca</title>
+  <meta name="author" content="Jared Tobin">
 
   
-  <entry>
-    <title type="html"><![CDATA[Basic EC2 Management with Ansible]]></title>
-    <link href="http://jtobin.github.io/blog/2013/12/21/basic-ec2-management-with-ansible/"/>
-    <updated>2013-12-21T12:26:56+08:00</updated>
-    <id>http://jtobin.github.io/blog/2013/12/21/basic-ec2-management-with-ansible</id>
-    <content type="html"><![CDATA[<p>EC2 is cool.  The ability to dynamically spin up a whack of free-to-cheap
+  <meta name="description" content="EC2 is cool. The ability to dynamically spin up a whack of free-to-cheap
+server instances anywhere in the world at any time, is.. well, pretty mean. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jtobin.github.io/blog/2013/12/21/basic-ec2-management-with-ansible/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="jtobin.ca" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jtobin.ca</a>  &#47; <a href="/blog/archives">archives</a> &#47; <a href="/about">about</a> </h1>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Basic EC2 Management With Ansible</h1>
+      
+    
+    
+      <p class="meta">
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>EC2 is cool.  The ability to dynamically spin up a whack of free-to-cheap
 server instances anywhere in the world at any time, is.. well, pretty mean.
 Need to run a long computation job?  Scale up a distributed system?  Reduce
 latency to clients in a particular geographical region?  YEAH WE CAN DO THAT.</p>
@@ -337,22 +381,22 @@ explicitly.</p>
 <p>Running it, we can see the security group being created, the instances popping
 up, and tags getting assigned:</p>
 
-<p><img src="http://jtobin.github.io/images/ansible-first.png" /></p>
+<p><img src="/images/ansible-first.png" /></p>
 
 <p>Our essential software getting pulled down:</p>
 
-<p><img src="http://jtobin.github.io/images/ansible-third.png" /></p>
+<p><img src="/images/ansible-third.png" /></p>
 
 <p>And the tail end of our 0MQ stack showing up before the play ends with a
 summary.</p>
 
-<p><img src="http://jtobin.github.io/images/ansible-fourth.png" /></p>
+<p><img src="/images/ansible-fourth.png" /></p>
 
 <p>For a quick sanity check to ensure that everything really did go as planned, I
 can look for the CZMQ header on each instance.  This time I’ll run a quick
 ad-hoc command, identifying the hosts via the ‘Abrek’ tag:</p>
 
-<p><img src="http://jtobin.github.io/images/ansible-fifth.png" /></p>
+<p><img src="/images/ansible-fifth.png" /></p>
 
 <p>Voila, three servers ready to roll.  Great stuff.</p>
 
@@ -360,59 +404,84 @@ ad-hoc command, identifying the hosts via the ‘Abrek’ tag:</p>
 documentation</a>, as well as the great
 tutorials at <a href="http://http://answersforaws.com/">AnswersForAws</a>.</p>
 
-]]></content>
-  </entry>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <entry>
-    <title type="html"><![CDATA[Managing Learning as a Side Project]]></title>
-    <link href="http://jtobin.github.io/blog/2013/12/20/side-projects/"/>
-    <updated>2013-12-20T10:12:02+08:00</updated>
-    <id>http://jtobin.github.io/blog/2013/12/20/side-projects</id>
-    <content type="html"><![CDATA[<p>I regularly find myself wanting to learn too many things at once.  This might
-be justifiable in some sense; there’s an awful lot out there to learn.  Often,
-skimming over some topic or other feels like enough to develop a sufficiently
-high-level model of what it is or how it works.  Armed with that (dangerously
-small amount of) knowledge, however, the urge to pick up some other topic tends
-to arise..  and so the process repeats.</p>
 
-<p>This is all well and good in order to survey what’s out there, but left
-unchecked, a survey of topics is all one might get.  <em>Le dilettantisme</em> can be
-understandable, but never desirable.</p>
 
-<p>Some time ago, I decided to try restricting myself to learning only one
-particular topic for two weeks at a time, as a bit of a side project.  Think of
-it as a ‘learning sprint’, if you will.  The idea is that the time between
-iterations is sufficiently short to ensure that one can’t hunger too badly to
-switch to some other topic mid-sprint.  At the same time, each iteration is
-lengthy enough to ensure a reasonable amount of immersion and depth.</p>
+      
+      
 
-<p>I managed a single iteration, but due to travel and a lack of conviction about
-the whole thing, never started another.  I think I’m going to start again, but
-with a little more intent this time.</p>
-
-<p>Two weeks can be a long-as time for some topics, though, so I believe I’ll work
-in one-to-two week commitments, depending on the subject.</p>
-
-<p>To start, I’m going to choose <a href="http://zeromq.org/">0MQ</a>, a framework that I
-sort-of know and definitely love.  We’ve used it in production on a previous
-app I worked on, and I’ve even contributed to the official Ruby bindings.  But,
-I still have a lot to learn about it.</p>
-
-<p>So let’s see how it goes.</p>
-
-]]></content>
-  </entry>
+<span class="categories">
   
-  <entry>
-    <title type="html"><![CDATA[A new blog]]></title>
-    <link href="http://jtobin.github.io/blog/2013/12/17/a-new-blog/"/>
-    <updated>2013-12-17T05:46:26+08:00</updated>
-    <id>http://jtobin.github.io/blog/2013/12/17/a-new-blog</id>
-    <content type="html"><![CDATA[<p>I’ve been feeling an itch to write more often, and this seems as good a place
-as any to do it.  If anything here winds up being useful to anyone else, all
-the better.</p>
-
-]]></content>
-  </entry>
+    <a class='category' href='/blog/categories/infrastructure/'>infrastructure</a>
   
-</feed>
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2013/12/20/side-projects/" title="Previous Post: Managing Learning as a Side Project">&laquo; Managing Learning as a Side Project</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2013 Jared Tobin
+  <span class="credit" style="float: right">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'] ],
+      displayMath: [ ['$$', '$$']],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  });
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+</body>
+</html>
