@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: continuations | jtobin.ca]]></title>
+  <link href="http://jtobin.github.io/blog/categories/continuations/atom.xml" rel="self"/>
+  <link href="http://jtobin.github.io/"/>
+  <updated>2014-01-12T13:21:45+08:00</updated>
+  <id>http://jtobin.github.io/</id>
+  <author>
+    <name><![CDATA[Jared Tobin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Measures and Continuations]]></title>
+    <link href="http://jtobin.github.io/blog/2014/01/08/measures-and-continuations/"/>
+    <updated>2014-01-08T11:32:05+08:00</updated>
+    <id>http://jtobin.github.io/blog/2014/01/08/measures-and-continuations</id>
+    <content type="html"><![CDATA[<p>I’ve always been interested in measure theory.  I’m not even sure why, exactly.
+Probably because it initially seemed so mysterious to me.  As an undergrad,
+measure theory was this unknown, exotic key to <em>truly</em> understanding
+probability.</p>
+
+<p>Well, sort of.  It’s certainly the key to understanding formal probability,
+but it no longer seems all that exotic, nor really necessary for grokking what
+I’d call the true essence of probability.  It’s pretty much real analysis with
+specialized attention paid to notions of factoring (independence) and ratios
+(conditioning).  Nowadays I relate it moreso to accounting; not the most
+inspiring of subjects, but necessary if you want to make sure everything adds
+up the way you think it should.</p>
+
+<!-- more -->
+
+<p>Measures are just one of many structures that uniquely characterize probability
+distributions, such as density functions, Fourier transforms, sampling
+functions, and so on.  They’ve been considered to be particularly useful for
+proving things, due to their generality.  They can be pretty abstract, but a
+perfectly suitable analogy of a measure for most practical purposes is a
+function that, when provided with a region, returns a volume.  Pretty simple.</p>
+
+<p>Volume also tends to be synonymous with integration, in that given a (positive)
+function, the integral of that function over some region defines a volume, or
+‘area under the curve’.  For more general functions, integrals can be thought
+of as returning a kind of center of mass.</p>
+
+<p>Integration and measures go hand in hand.  In abstract integration, one
+integrates a function over some region ‘against’ a measure, which assigns
+particular weights to infinitesimals of the underlying space.  Measures that
+tend to pop up in practice tend to be counting measure, Lebesgue measure, and
+assorted image measures corresponding to particular probability distributions.</p>
+
+<p>Imagine representing a measure on a computer.  One possible way to do it is to
+represent a measure as an integral directly.  Or, rather, as a generic
+<em>procedure</em> for integration.</p>
+
+<p>Consider the setup where you pass a measurable function to an integration
+procedure and it spits out a center of mass.  This has the convenient benefit
+that the responsibility for preserving measurability can be delegated to the
+function passed as an argument, rather than hard-coded into a measure itself
+(which might be very hard to do).  Implemented in a type system - take
+Haskell’s - we can implement a measure as something like</p>
+
+<pre><code>newtype Measure a = Measure { measure :: (a -&gt; Double) -&gt; Double }
+</code></pre>
+
+<p>which is a wrapper over a measurable function that we want to integrate.</p>
+
+<p>This is a restricted form of the <code>Cont</code> type used to define the continuation
+monad.  That makes sense; we’re defining a measure to be a program that should
+perform integration, and the particular implementation of that program defines
+a particular measure.  If we’re willing to play things kind of fast and loose,
+we can define measures by continuations proper:</p>
+
+<pre><code>newtype Cont r a = Cont { runCont :: (a -&gt; r) -&gt; r }
+
+instance Functor (Cont r) where
+  fmap f c = Cont $ \g -&gt; runCont c (g . f)
+
+instance Monad (Cont r) where
+  return x = Cont $ \f -&gt; f x
+  c &gt;&gt;= f  = Cont $ \d -&gt; runCont c $ \g -&gt; runCont (f g) d
+
+type Measure a = Cont Double a
+</code></pre>
+
+<p>There are three immediately interesting things about this setup:</p>
+
+<ul>
+  <li><code>fmap</code> creates an image or pushforward measure by pushing a function onto an
+existing measure</li>
+  <li><code>return</code> is the Dirac measure at a point</li>
+  <li><code>&gt;&gt;=</code> is a marginalizing operator</li>
+</ul>
+
+<p>There’s a big caveat in going this route: nonlinear continuation-y stuff like
+<code>callCC</code> will break everything, so you can’t use it in the context of measures.
+In practice defining a specific restricted type might be a bit safer, but we
+can just avoid using it.</p>
+
+<p>Usually we have something like $ \int f d\mathbb{P}$ in mathematical notation
+to denote the integral of a function $ f $ against a measure $\mathbb{P}$, so
+a more familiar version of <code>runCont</code> is</p>
+
+<pre><code>integrate :: (a -&gt; Double) -&gt; Measure a -&gt; Double
+integrate = flip runCont
+</code></pre>
+
+<p><code>integrate</code> defines the most basic ‘query’ of sorts on a measure.  You can
+query a measure to find its volume, center of mass, and various higher-ordere
+moments.  The simplest examples include:</p>
+
+<pre><code>volume :: Measure a -&gt; Double
+volume = integrate (const 1)
+
+expectation :: Measure a -&gt; Double
+expectation = integrate id
+
+variance :: Measure a -&gt; Double
+variance mu = integrate (^ 2) mu - expectation mu ^ 2
+</code></pre>
+
+<p>For any probability measure, <code>volume</code> should trivially return 1.</p>
+
+<p>To create measures, you can put together functions like</p>
+
+<pre><code>fromDensityCounting :: (a -&gt; Double) -&gt; [a] -&gt; Measure a
+fromDensityLebesgue :: (Double -&gt; Double) -&gt; Measure Double
+fromObservations    :: [a] -&gt; Measure a
+</code></pre>
+
+<p>that will create measures from the appropriate underlying structures. 
+<code>fromObservations</code> is probably the most interesting, being the least
+restrictive of the three.  You could also implement <code>fromSamplingFunction</code> to
+create a (random) measure from a sampling function and a seed.</p>
+
+<p>It’s easy to define stuff like abstract addition, subtraction, and
+multiplication on measures.  Just use <code>liftM2</code> and your arithmetic operator of
+choice.  In particular, abstract addition of measures corresponds to
+measure convolution.</p>
+
+<p>Viewing measures in this way is kind of neat, if of questionable practical
+value.  You can see a implementation of this stuff
+<a href="http://github.com/jtobin/measurable">here</a>, which includes a few examples to
+boot.  But in practice, you can’t seem to get very far with an implementation
+like this.  Exact computation involving probabilities is always going to be
+limited to toy cases.  One of the key morals of <a href="http://web.mit.edu/vkm/www/vkm-dissertation.pdf">Vikash Mansinghka’s excellent
+dissertation</a>, relevant here,
+is “don’t compute probabilities; instead, sample good guesses”.  </p>
+
+]]></content>
+  </entry>
+  
+</feed>
