@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: productivity | jtobin.ca]]></title>
-  <link href="http://jtobin.github.io/blog/categories/productivity/atom.xml" rel="self"/>
+  <title><![CDATA[Category: writing | jtobin.ca]]></title>
+  <link href="http://jtobin.github.io/blog/categories/writing/atom.xml" rel="self"/>
   <link href="http://jtobin.github.io/"/>
   <updated>2014-01-27T14:04:47+08:00</updated>
   <id>http://jtobin.github.io/</id>
@@ -82,46 +82,6 @@ strenuous (in which case I probably have bigger problems to worry about) I can
 go to thirty minutes or even less.  <a href="http://en.wikipedia.org/wiki/The_Unreasonable_Effectiveness_of_Mathematics_in_the_Natural_Sciences">Math</a>
 and <a href="research.google.com/pubs/archive/35179.pdf">data</a> are well-known to be
 ‘unreasonably effective’ in some sense, but habit just might be as well.</p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Managing Learning as a Side Project]]></title>
-    <link href="http://jtobin.github.io/blog/2013/12/20/side-projects/"/>
-    <updated>2013-12-20T10:12:02+08:00</updated>
-    <id>http://jtobin.github.io/blog/2013/12/20/side-projects</id>
-    <content type="html"><![CDATA[<p>I regularly find myself wanting to learn too many things at once.  This might
-be justifiable in some sense; there’s an awful lot out there to learn.  Often,
-skimming over some topic or other feels like enough to develop a sufficiently
-high-level model of what it is or how it works.  Armed with that (dangerously
-small amount of) knowledge, however, the urge to pick up some other topic tends
-to arise..  and so the process repeats.</p>
-
-<p>This is all well and good in order to survey what’s out there, but left
-unchecked, a survey of topics is all one might get.  <em>Le dilettantisme</em> can be
-understandable, but never desirable.</p>
-
-<p>Some time ago, I decided to try restricting myself to learning only one
-particular topic for two weeks at a time, as a bit of a side project.  Think of
-it as a ‘learning sprint’, if you will.  The idea is that the time between
-iterations is sufficiently short to ensure that one can’t hunger too badly to
-switch to some other topic mid-sprint.  At the same time, each iteration is
-lengthy enough to ensure a reasonable amount of immersion and depth.</p>
-
-<p>I managed a single iteration, but due to travel and a lack of conviction about
-the whole thing, never started another.  I think I’m going to start again, but
-with a little more intent this time.</p>
-
-<p>Two weeks can be a long-as time for some topics, though, so I believe I’ll work
-in one-to-two week commitments, depending on the subject.</p>
-
-<p>To start, I’m going to choose <a href="http://zeromq.org/">0MQ</a>, a framework that I
-sort-of know and definitely love.  We’ve used it in production on a previous
-app I worked on, and I’ve even contributed to the official Ruby bindings.  But,
-I still have a lot to learn about it.</p>
-
-<p>So let’s see how it goes.</p>
 
 ]]></content>
   </entry>
