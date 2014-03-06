@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: writing, | jtobin.ca]]></title>
-  <link href="http://jtobin.github.io/blog/categories/writing/atom.xml" rel="self"/>
+  <title><![CDATA[Category: work | jtobin.ca]]></title>
+  <link href="http://jtobin.github.io/blog/categories/work/atom.xml" rel="self"/>
   <link href="http://jtobin.github.io/"/>
   <updated>2014-03-07T06:55:03+08:00</updated>
   <id>http://jtobin.github.io/</id>
