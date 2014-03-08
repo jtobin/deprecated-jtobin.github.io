@@ -4,7 +4,7 @@
   <title><![CDATA[jtobin.ca]]></title>
   <link href="http://jtobin.github.io/atom.xml" rel="self"/>
   <link href="http://jtobin.github.io/"/>
-  <updated>2014-03-09T07:26:25+08:00</updated>
+  <updated>2014-03-09T07:27:44+08:00</updated>
   <id>http://jtobin.github.io/</id>
   <author>
     <name><![CDATA[Jared Tobin]]></name>
@@ -12,6 +12,280 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Property Testing in Ruby]]></title>
+    <link href="http://jtobin.github.io/blog/2014/03/09/property-testing-in-ruby/"/>
+    <updated>2014-03-09T06:09:56+08:00</updated>
+    <id>http://jtobin.github.io/blog/2014/03/09/property-testing-in-ruby</id>
+    <content type="html"><![CDATA[<p>Testing properties of Haskell functions with
+<a href="http://hackage.haskell.org/package/QuickCheck">QuickCheck</a> is easy and pretty
+enjoyable.  It turns out Ruby has a QuickCheck-like property testing library
+called <a href="http://github.com/hayeah/rantly">rantly</a>.</p>
+
+<p>Let’s test the ‘greed game’ <a href="http://rubykoans.com/">Ruby koan</a>.  In the greed
+game, one rolls up to five dice and calculates a score according to the
+following rules:</p>
+
+<ul>
+  <li>three ones is 1000 points</li>
+  <li>three of the same non-one number is worth 100 times that number</li>
+  <li>a one that is not a part of a set of three is worth 100 points</li>
+  <li>a five that is not a part of a set of three is worth 50 points</li>
+  <li>everything else is worth one point</li>
+</ul>
+
+<p>So, for example, a roll of 1, 1, 1, 5, 1 would yield 1150 points.  A roll of
+3, 4, 5, 3, 3 would yield 350 points.</p>
+
+<p>The basic scoring mechanism can be implemented like so:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="nb">require</span> <span class="s1">&#39;rantly/property&#39;</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+</span><span class="line">  <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">group_by</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="p">}</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span> <span class="n">score_group</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">count</span> <span class="p">}</span><span class="o">.</span><span class="n">reduce</span> <span class="ss">:+</span><span class="p">)</span> <span class="o">||</span> <span class="mi">0</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">score_group</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</span><span class="line">  <span class="n">value_score</span>  <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span> <span class="o">=&gt;</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">5</span> <span class="o">=&gt;</span> <span class="mi">50</span><span class="p">}</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">||</span> <span class="mi">0</span>
+</span><span class="line">  <span class="n">triple_score</span> <span class="o">=</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="mi">1000</span> <span class="p">:</span> <span class="n">k</span> <span class="o">*</span> <span class="mi">100</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">v</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="o">?</span> <span class="n">triple_score</span> <span class="o">+</span> <span class="n">value_score</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="p">:</span> <span class="n">value_score</span> <span class="o">*</span> <span class="n">v</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Property tests require generators to cook up requisite input data.  Some
+generators we might be interested in, to start, are those to create valid dice
+rolls:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">valid_roll</span>   <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="no">Rantly</span> <span class="p">{</span> <span class="n">range</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class="line"><span class="n">valid_number</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="no">Rantly</span> <span class="p">{</span> <span class="n">range</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span> <span class="p">}</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><code>valid_roll</code> describes the result of an individual dice roll, while
+<code>valid_number</code> describes the number of dice that can be rolled for an input
+score.  <code>range</code> generates a value between its provided arguments, inclusive.
+Rantly comes equipped with a bunch of primitive generators and combinators:
+<code>choose</code>, <code>array</code>, <code>sized</code>, etc.</p>
+
+<p>We can use those primitive generators to create other generators.  In
+particular, a valid input to the <code>score</code> function should be a 0-to-5 length
+array in which each element is between 1 and 6 inclusive; that is, an array
+with length generated from <code>valid_number</code> and elements generated from
+<code>valid_roll</code>.</p>
+
+<p>Below, I’ll create that composite generator in an RSpec <code>describe</code> block and
+then test a couple of properties of the <code>score</code> function:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">describe</span> <span class="s1">&#39;score&#39;</span> <span class="k">do</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">let</span> <span class="p">(</span><span class="ss">:rolls</span><span class="p">)</span> <span class="k">do</span>
+</span><span class="line">    <span class="o">-&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="n">sized</span><span class="p">(</span><span class="n">valid_number</span><span class="o">.</span><span class="n">call</span><span class="p">)</span> <span class="p">{</span> <span class="n">array</span> <span class="p">{</span> <span class="n">valid_roll</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should be non-negative&#39;</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+</span><span class="line">      <span class="n">expect</span><span class="p">(</span><span class="n">score</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should be less than or equal to 1200&#39;</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+</span><span class="line">      <span class="n">expect</span><span class="p">(</span><span class="n">score</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be</span> <span class="o">&lt;=</span> <span class="mi">1200</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Running this code will test each of those properties on 750 random inputs
+generated by the <code>rolls</code> generator.</p>
+
+<p>One might also want to test how functions behave on invalid input.  Let’s
+augment the original scoring functions with some exception handling:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+</span><span class="line">  <span class="nb">fail</span> <span class="no">ArgumentError</span><span class="p">,</span> <span class="s1">&#39;invalid argument&#39;</span> <span class="k">unless</span> <span class="n">ds</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">between?</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">begin</span>
+</span><span class="line">    <span class="n">groups</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">group_by</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="p">}</span>
+</span><span class="line">    <span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span> <span class="n">score_group</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">count</span> <span class="p">}</span><span class="o">.</span><span class="n">reduce</span> <span class="ss">:+</span><span class="p">)</span> <span class="o">||</span> <span class="mi">0</span>
+</span><span class="line">  <span class="k">rescue</span> <span class="no">ArgumentError</span>
+</span><span class="line">    <span class="k">raise</span> <span class="no">ArgumentError</span><span class="p">,</span> <span class="s1">&#39;invalid argument&#39;</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">score_group</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</span><span class="line">  <span class="nb">fail</span> <span class="no">ArgumentError</span> <span class="k">unless</span> <span class="n">k</span><span class="o">.</span><span class="n">between?</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</span><span class="line">  <span class="nb">fail</span> <span class="no">ArgumentError</span> <span class="k">unless</span> <span class="n">v</span><span class="o">.</span><span class="n">between?</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">value_score</span>  <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span> <span class="o">=&gt;</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">5</span> <span class="o">=&gt;</span> <span class="mi">50</span> <span class="p">}</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">||</span> <span class="mi">0</span>
+</span><span class="line">  <span class="n">triple_score</span> <span class="o">=</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="mi">1000</span> <span class="p">:</span> <span class="n">k</span> <span class="o">*</span> <span class="mi">100</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">v</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="o">?</span> <span class="n">triple_score</span> <span class="o">+</span> <span class="n">value_score</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="p">:</span> <span class="n">value_score</span> <span class="o">*</span> <span class="n">v</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>and then add generators for invalid rolls:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">invalid_roll</span>   <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="no">Rantly</span> <span class="p">{</span> <span class="n">choose</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class="line"><span class="n">invalid_number</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="no">Rantly</span> <span class="p">{</span> <span class="n">choose</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span> <span class="p">}</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>then, with the addition of two new composite generators,  we can test that the
+exception handling behaves as we expect:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">describe</span> <span class="s1">&#39;score&#39;</span> <span class="k">do</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">let</span><span class="p">(</span><span class="ss">:rolls</span><span class="p">)</span> <span class="k">do</span>
+</span><span class="line">    <span class="o">-&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="n">sized</span><span class="p">(</span><span class="n">valid_number</span><span class="o">.</span><span class="n">call</span><span class="p">)</span> <span class="p">{</span> <span class="n">array</span> <span class="p">{</span> <span class="n">valid_roll</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">let</span><span class="p">(</span><span class="ss">:rolls_invalid_number</span><span class="p">)</span> <span class="k">do</span>
+</span><span class="line">    <span class="o">-&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="n">sized</span><span class="p">(</span><span class="n">invalid_number</span><span class="o">.</span><span class="n">call</span><span class="p">)</span> <span class="p">{</span> <span class="n">array</span> <span class="p">{</span> <span class="n">valid_roll</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">let</span><span class="p">(</span><span class="ss">:rolls_invalid_roll</span><span class="p">)</span> <span class="k">do</span>
+</span><span class="line">    <span class="o">-&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="n">sized</span><span class="p">(</span><span class="n">valid_number</span><span class="o">.</span><span class="n">call</span><span class="p">)</span> <span class="p">{</span> <span class="n">array</span> <span class="p">{</span> <span class="n">invalid_roll</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should be non-negative&#39;</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+</span><span class="line">      <span class="n">expect</span><span class="p">(</span><span class="n">score</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should be less than or equal to 1200&#39;</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+</span><span class="line">      <span class="n">expect</span><span class="p">(</span><span class="n">score</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be</span> <span class="o">&lt;=</span> <span class="mi">1200</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should raise an error for an invalid number of rolls&#39;</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls_invalid_number</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+</span><span class="line">      <span class="n">expect</span> <span class="p">{</span> <span class="n">score</span> <span class="n">r</span> <span class="p">}</span><span class="o">.</span><span class="n">to</span> <span class="n">raise_error</span><span class="p">(</span><span class="no">ArgumentError</span><span class="p">)</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should raise an error for an invalid roll value&#39;</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls_invalid_roll</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+</span><span class="line">      <span class="n">expect</span> <span class="p">{</span> <span class="n">score</span> <span class="n">r</span> <span class="p">}</span><span class="o">.</span><span class="n">to</span> <span class="n">raise_error</span><span class="p">(</span><span class="no">ArgumentError</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>As often happens, property testing tends to suss out weird corner cases in your
+code and help you understand it better.  Just while doing this example I
+realized that <code>ArgumentError</code> wouldn’t necessarily be thrown for an invalid
+roll <em>value</em> if the number of input rolls was actually empty.  Hence, the
+addition of <code>if r.count &gt; 0</code> to the last test.</p>
+
+<p>Property testing also subsumes unit tests.  If you use a static or relatively
+static generator, you’re effectively <em>doing</em> unit testing.  You can see this in
+the cases of the <code>invalid_roll</code> and <code>invalid_number</code> generators, in which each
+is generating inputs from only a very small domain.</p>
+
+<p>IMO familiarity with a QuickCheck-like property testing library is good to
+have.  Rantly is not quite QuickCheck, but it’s still a joy to use.</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Notes On Another Guy's Notes]]></title>
