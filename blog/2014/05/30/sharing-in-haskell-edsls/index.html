@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>jtobin.ca</title>
+  <title>Sharing in Haskell EDSLs - jtobin.ca</title>
   <meta name="author" content="Jared Tobin">
 
   
@@ -19,7 +19,7 @@ of abstract syntax. One of the things that I’ve managed to grok along &hellip;
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jtobin.ca/">
+  <link rel="canonical" href="http://jtobin.ca/blog/2014/05/30/sharing-in-haskell-edsls/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -57,16 +57,13 @@ of abstract syntax. One of the things that I’ve managed to grok along &hellip;
 </header>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/05/30/sharing-in-haskell-edsls/">Sharing in Haskell EDSLs</a></h1>
+      
+        <h1 class="entry-title">Sharing in Haskell EDSLs</h1>
       
     
     
@@ -77,7 +74,7 @@ of abstract syntax. One of the things that I’ve managed to grok along &hellip;
   </header>
 
 
-  <div class="entry-content"><p>Lately I’ve been trying to do some magic by way of nonstandard interpretations
+<div class="entry-content"><p>Lately I’ve been trying to do some magic by way of nonstandard interpretations
 of abstract syntax.  One of the things that I’ve managed to grok along the way
 has been the problem of <em>sharing</em> in deeply-embedded languages.</p>
 
@@ -589,682 +586,43 @@ may be more convenient than others, depending on what you’re trying to do.</p>
 some gists.</p>
 
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/03/17/sampling-functions-vs-generative-models/">Sampling Functions and Generative Models</a></h1>
+  
+
+
       
+      
+
+
+    </p>
     
+      <div class="sharing">
+  
+  
+</div>
+
     
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The term ‘probability distribution’ is actually pretty vague.  A probability
-distribution is an abstract object that can be distinguished uniquely (i.e.
-from other probability distributions) by way of any of a bunch of concrete
-representations.  Probability density or mass functions, moment generating
-functions, characteristic functions, cumulative distribution functions, random
-variables, and measures all reify a probability distribution as something
-tangible that can be worked with.  Image measures in particular are sometimes
-called ‘distributions’, though they still just form a single possible
-reification of the underlying concept.  In formal probability theory the term
-‘law’ is often used to refer to the abstract object being characterized.</p>
-
-<p>Different characterizations are useful when doing different kinds of work. 
-Measures are useful when doing proofs.  Probability densities and mass
-functions are useful for a whole whack of applications.  Moment generating
-functions are useful for exercises in introductory mathematical statistics
-courses.</p>
-
-<p>Sampling functions - procedures that produce samples from some target
-distribution - also characterize probability distributions uniquely.  They are
-an excellent basis for introducing and transforming uncertainty in
-probabilistic programming languages.  A sampling function takes as its sole
-input a <em>stream of randomness</em>, which is consumed and transformed to produce a
-sample from the distribution that it characterizes.  The stream can be a lazy
-list or, similarly, a pseudo-random number generator.</p>
-
-<p>Sampling functions are precursors to <em>generative models</em>: models that take both
-randomness and causal inputs as arguments and produce a possible effect.
-Generative models are the main currency of probabilistic programming; they
-specify a mapping between hypothesized causes and a probability distribution
-over effects.  Sampling functions are the basis for handling all uncertainty in
-several PP implementations.</p>
-
-<p>It’s useful to look at sampling functions and generative models to emphasize
-the distinction between the two.  In Haskelly pseudocode, they have the
-following types:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="haskell"><span class="line"><span class="nf">samplingFunction</span> <span class="ow">::</span> <span class="kt">Randomness</span> <span class="ow">-&gt;</span> <span class="kt">Effect</span>
-</span><span class="line">
-</span><span class="line"><span class="nf">generativeModel</span>  <span class="ow">::</span> <span class="kt">Causes</span> <span class="ow">-&gt;</span> <span class="kt">Randomness</span> <span class="ow">-&gt;</span> <span class="kt">Effect</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>It’s easy to see that a generative model, when provided with some causes, is
-itself a sampling function.</p>
-
-<p>We can use a monad to abstract out the provisioning of randomness and make
-everything a little cleaner.  Imagine ‘Observable’ to be a monad that handles
-the propagation of randomness in our functions; any type tagged with
-‘Observable’ is a probability distribution over some other type (and maybe we
-would run it with a function called <code>observe</code> or <code>sample</code>).  Using that, we can
-write the above as follows:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="haskell"><span class="line"><span class="nf">samplingFunction</span> <span class="ow">::</span> <span class="kt">Observable</span> <span class="kt">Effect</span>
-</span><span class="line">
-</span><span class="line"><span class="nf">generativeModel</span>  <span class="ow">::</span> <span class="kt">Causes</span> <span class="ow">-&gt;</span> <span class="kt">Observable</span> <span class="kt">Effect</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>Very clean.  Here it’s immediately clear that only difference between a
-sampling function and a model is the introduction of causes to the latter.  A
-generative model contains some internal logic that manipulates external causes
-in some way; a sampling function does not.</p>
-
-<p>You can see some in-progress development of this idea
-<a href="http://github.com/jtobin/observable">here</a> and
-<a href="http://github.com/glutamate/probably-baysig">here</a>.</p>
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2014/03/17/sampling-functions-vs-generative-models/" title="Previous Post: Sampling Functions and Generative Models">&laquo; Sampling Functions and Generative Models</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
 </div>
-  
-  
 
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/03/09/property-testing-in-ruby/">Property Testing in Ruby</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Testing properties of Haskell functions with
-<a href="http://hackage.haskell.org/package/QuickCheck">QuickCheck</a> is easy and pretty
-enjoyable.  It turns out Ruby has a QuickCheck-like property testing library
-called <a href="http://github.com/hayeah/rantly">rantly</a>.</p>
-
-<p>Let’s test the ‘greed game’ <a href="http://rubykoans.com/">Ruby koan</a>.  In the greed
-game, one rolls up to five dice and calculates a score according to the
-following rules:</p>
-
-<ul>
-  <li>three ones is 1000 points</li>
-  <li>three of the same non-one number is worth 100 times that number</li>
-  <li>a one that is not a part of a set of three is worth 100 points</li>
-  <li>a five that is not a part of a set of three is worth 50 points</li>
-  <li>everything else is worth one point</li>
-</ul>
-
-<p>So, for example, a roll of 1, 1, 1, 5, 1 would yield 1150 points.  A roll of
-3, 4, 5, 3, 3 would yield 350 points.</p>
-
-<p>The basic scoring mechanism can be implemented like so:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="nb">require</span> <span class="s1">&#39;rantly/property&#39;</span>
-</span><span class="line">
-</span><span class="line"><span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
-</span><span class="line">  <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">group_by</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="p">}</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span> <span class="n">score_group</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">count</span> <span class="p">}</span><span class="o">.</span><span class="n">reduce</span> <span class="ss">:+</span><span class="p">)</span> <span class="o">||</span> <span class="mi">0</span>
-</span><span class="line"><span class="k">end</span>
-</span><span class="line">
-</span><span class="line"><span class="k">def</span> <span class="nf">score_group</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-</span><span class="line">  <span class="n">value_score</span>  <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span> <span class="o">=&gt;</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">5</span> <span class="o">=&gt;</span> <span class="mi">50</span><span class="p">}</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">||</span> <span class="mi">0</span>
-</span><span class="line">  <span class="n">triple_score</span> <span class="o">=</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="mi">1000</span> <span class="p">:</span> <span class="n">k</span> <span class="o">*</span> <span class="mi">100</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">v</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="o">?</span> <span class="n">triple_score</span> <span class="o">+</span> <span class="n">value_score</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="p">:</span> <span class="n">value_score</span> <span class="o">*</span> <span class="n">v</span>
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>Property tests require generators to cook up requisite input data.  Some
-generators we might be interested in, to start, are those to create valid dice
-rolls:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">valid_roll</span>   <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="no">Rantly</span> <span class="p">{</span> <span class="n">range</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span> <span class="p">}</span> <span class="p">}</span>
-</span><span class="line"><span class="n">valid_number</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="no">Rantly</span> <span class="p">{</span> <span class="n">range</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span> <span class="p">}</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p><code>valid_roll</code> describes the result of an individual dice roll, while
-<code>valid_number</code> describes the number of dice that can be rolled for an input
-score.  <code>range</code> generates a value between its provided arguments, inclusive.
-Rantly comes equipped with a bunch of primitive generators and combinators:
-<code>choose</code>, <code>array</code>, <code>sized</code>, etc.</p>
-
-<p>We can use those primitive generators to create other generators.  In
-particular, a valid input to the <code>score</code> function should be a 0-to-5 length
-array in which each element is between 1 and 6 inclusive; that is, an array
-with length generated from <code>valid_number</code> and elements generated from
-<code>valid_roll</code>.</p>
-
-<p>Below, I’ll create that composite generator in an RSpec <code>describe</code> block and
-then test a couple of properties of the <code>score</code> function:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">describe</span> <span class="s1">&#39;score&#39;</span> <span class="k">do</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">let</span> <span class="p">(</span><span class="ss">:rolls</span><span class="p">)</span> <span class="k">do</span>
-</span><span class="line">    <span class="o">-&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="n">sized</span><span class="p">(</span><span class="n">valid_number</span><span class="o">.</span><span class="n">call</span><span class="p">)</span> <span class="p">{</span> <span class="n">array</span> <span class="p">{</span> <span class="n">valid_roll</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should be non-negative&#39;</span> <span class="k">do</span>
-</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
-</span><span class="line">      <span class="n">expect</span><span class="p">(</span><span class="n">score</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be</span> <span class="o">&gt;=</span> <span class="mi">0</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should be less than or equal to 1200&#39;</span> <span class="k">do</span>
-</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
-</span><span class="line">      <span class="n">expect</span><span class="p">(</span><span class="n">score</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be</span> <span class="o">&lt;=</span> <span class="mi">1200</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>Running this code will test each of those properties on 750 random inputs
-generated by the <code>rolls</code> generator.</p>
-
-<p>One might also want to test how functions behave on invalid input.  Let’s
-augment the original scoring functions with some exception handling:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
-</span><span class="line">  <span class="nb">fail</span> <span class="no">ArgumentError</span><span class="p">,</span> <span class="s1">&#39;invalid argument&#39;</span> <span class="k">unless</span> <span class="n">ds</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">between?</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">  <span class="k">begin</span>
-</span><span class="line">    <span class="n">groups</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">group_by</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="p">}</span>
-</span><span class="line">    <span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span> <span class="n">score_group</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">count</span> <span class="p">}</span><span class="o">.</span><span class="n">reduce</span> <span class="ss">:+</span><span class="p">)</span> <span class="o">||</span> <span class="mi">0</span>
-</span><span class="line">  <span class="k">rescue</span> <span class="no">ArgumentError</span>
-</span><span class="line">    <span class="k">raise</span> <span class="no">ArgumentError</span><span class="p">,</span> <span class="s1">&#39;invalid argument&#39;</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line"><span class="k">end</span>
-</span><span class="line">
-</span><span class="line"><span class="k">def</span> <span class="nf">score_group</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-</span><span class="line">  <span class="nb">fail</span> <span class="no">ArgumentError</span> <span class="k">unless</span> <span class="n">k</span><span class="o">.</span><span class="n">between?</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-</span><span class="line">  <span class="nb">fail</span> <span class="no">ArgumentError</span> <span class="k">unless</span> <span class="n">v</span><span class="o">.</span><span class="n">between?</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">value_score</span>  <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span> <span class="o">=&gt;</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">5</span> <span class="o">=&gt;</span> <span class="mi">50</span> <span class="p">}</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">||</span> <span class="mi">0</span>
-</span><span class="line">  <span class="n">triple_score</span> <span class="o">=</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="mi">1000</span> <span class="p">:</span> <span class="n">k</span> <span class="o">*</span> <span class="mi">100</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">v</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="o">?</span> <span class="n">triple_score</span> <span class="o">+</span> <span class="n">value_score</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="p">:</span> <span class="n">value_score</span> <span class="o">*</span> <span class="n">v</span>
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>and then add generators for invalid rolls:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">invalid_roll</span>   <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="no">Rantly</span> <span class="p">{</span> <span class="n">choose</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span> <span class="p">}</span> <span class="p">}</span>
-</span><span class="line"><span class="n">invalid_number</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="no">Rantly</span> <span class="p">{</span> <span class="n">choose</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span> <span class="p">}</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>then, with the addition of two new composite generators,  we can test that the
-exception handling behaves as we expect:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">describe</span> <span class="s1">&#39;score&#39;</span> <span class="k">do</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">let</span><span class="p">(</span><span class="ss">:rolls</span><span class="p">)</span> <span class="k">do</span>
-</span><span class="line">    <span class="o">-&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="n">sized</span><span class="p">(</span><span class="n">valid_number</span><span class="o">.</span><span class="n">call</span><span class="p">)</span> <span class="p">{</span> <span class="n">array</span> <span class="p">{</span> <span class="n">valid_roll</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">let</span><span class="p">(</span><span class="ss">:rolls_invalid_number</span><span class="p">)</span> <span class="k">do</span>
-</span><span class="line">    <span class="o">-&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="n">sized</span><span class="p">(</span><span class="n">invalid_number</span><span class="o">.</span><span class="n">call</span><span class="p">)</span> <span class="p">{</span> <span class="n">array</span> <span class="p">{</span> <span class="n">valid_roll</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">let</span><span class="p">(</span><span class="ss">:rolls_invalid_roll</span><span class="p">)</span> <span class="k">do</span>
-</span><span class="line">    <span class="o">-&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="n">sized</span><span class="p">(</span><span class="n">valid_number</span><span class="o">.</span><span class="n">call</span><span class="p">)</span> <span class="p">{</span> <span class="n">array</span> <span class="p">{</span> <span class="n">invalid_roll</span><span class="o">.</span><span class="n">call</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should be non-negative&#39;</span> <span class="k">do</span>
-</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
-</span><span class="line">      <span class="n">expect</span><span class="p">(</span><span class="n">score</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be</span> <span class="o">&gt;=</span> <span class="mi">0</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should be less than or equal to 1200&#39;</span> <span class="k">do</span>
-</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
-</span><span class="line">      <span class="n">expect</span><span class="p">(</span><span class="n">score</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be</span> <span class="o">&lt;=</span> <span class="mi">1200</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should raise an error for an invalid number of rolls&#39;</span> <span class="k">do</span>
-</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls_invalid_number</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
-</span><span class="line">      <span class="n">expect</span> <span class="p">{</span> <span class="n">score</span> <span class="n">r</span> <span class="p">}</span><span class="o">.</span><span class="n">to</span> <span class="n">raise_error</span><span class="p">(</span><span class="no">ArgumentError</span><span class="p">)</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">  <span class="n">it</span> <span class="s1">&#39;should raise an error for an invalid roll value&#39;</span> <span class="k">do</span>
-</span><span class="line">    <span class="n">property_of</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rolls_invalid_roll</span><span class="p">)</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="mi">750</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
-</span><span class="line">      <span class="n">expect</span> <span class="p">{</span> <span class="n">score</span> <span class="n">r</span> <span class="p">}</span><span class="o">.</span><span class="n">to</span> <span class="n">raise_error</span><span class="p">(</span><span class="no">ArgumentError</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>As often happens, property testing tends to suss out weird corner cases in your
-code and help you understand it better.  Just while doing this example I
-realized that <code>ArgumentError</code> wouldn’t necessarily be thrown for an invalid
-roll <em>value</em> if the number of input rolls was actually empty.  Hence, the
-addition of <code>if r.count &gt; 0</code> to the last test.</p>
-
-<p>Property testing also subsumes unit tests.  If you use a static or relatively
-static generator, you’re effectively <em>doing</em> unit testing.  You can see this in
-the cases of the <code>invalid_roll</code> and <code>invalid_number</code> generators, in which each
-is generating inputs from only a very small domain.</p>
-
-<p>IMO familiarity with a QuickCheck-like property testing library is good to
-have.  Rantly is not quite QuickCheck, but it’s still a joy to use.</p>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/03/07/notes-on-high-performance-browser-networking/">Notes on Another Guy&#8217;s Notes</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently bought Ilya Grigorik’s <a href="http://www.amazon.com/High-Performance-Browser-Networking-performance/dp/1449344763">High Performance Browser Networking</a>, which is an excellent book.  Also excellent is that Ilya wrote <a href="http://www.igvita.com/2013/09/29/retrospective-high-performance-browser-networking/">a great retrospective</a> on his book-writing process.  </p>
-
-<p>He made a few noteworthy points about the whole endeavour:</p>
-
-<ul>
-  <li>
-    <p>A ‘shitty first draft’ is the initial goal of most any writing.  Just get to the keyboard and start mashing the keys.</p>
-  </li>
-  <li>
-    <p><strong>Consistency is key</strong>.  Show up and get to work.</p>
-  </li>
-  <li>
-    <p>Early feedback is invaluable.</p>
-  </li>
-  <li>
-    <p>Incremental milestones and deadlines are helpful.  </p>
-  </li>
-  <li>
-    <p>Writing is an excellent way to expose the initial sloppiness of one’s thinking.</p>
-  </li>
-</ul>
-
-<p>I think these are all excellent insights, but the second and third ones really stand out to me.</p>
-
-<p>Early and constant feedback is just <a href="https://www.youtube.com/watch?v=vQyrMMAbXgc">really important</a>.  This is something that I’ve had to constantly remind myself of when working on largely-solo projects.  Having others examine your work immediately gives you an idea of its promise.  Are the other parties excited by it?  Indifferent?  Confused?  Can they point out an area that you haven’t really understood all that well, or something important that you missed?</p>
-
-<p>And above all else, <a href="/blog/2014/01/27/the-unreasonable-effectiveness-of-habit/">consistency is sacrosanct</a>.  This idea is only getting reinforced with time. </p>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/01/27/the-unreasonable-effectiveness-of-habit/">The Unreasonable Effectiveness of Habit</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Exactly 41 days ago I started a project called <a href="http://750words.com">750 Words</a>,
-which is simply a habit of writing a meagre 750 words every day.  They can be
-written on anything; just pick a topic (or several topics) in your head and get
-to writing about it.</p>
-
-<p>When I originally started, I thought that this would be a great way to work on
-blog posts, research papers, my dissertation, and so on.  Not so much the case,
-I’ve found.  After much internal debate as to its merits (the subject of at
-least one entry), the best use that I have found far 750 Words thus far has
-been a complete mind dump every morning over breakfast.</p>
-
-<p>Initially I tried rigorously picking a topic and writing essays and technical
-entries or what have you, but this seemed to actually go against the spirit of
-the exercise.  Nowadays I just open the browser and crank out whatever’s on my
-mind.  It generally takes me about 15 minutes.</p>
-
-<p>Why do I deem this to be a good use of my time?  More than anything, I think,
-it has been by observing the results over time: I’ve sustained a streak now for
-37 days straight, and quite enjoy waking up every day and putting another X on
-the calendar by virtue of writing another entry.  I don’t want to stop, and
-indeed, don’t intend to.  The main reward to me has been  seeing a basic goal
-manifest as a string of X’s on a calendar; the little 750-word-minimum mind
-dumps (which constitute over 32,000 words now) are a bonus.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/27/the-unreasonable-effectiveness-of-habit/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/01/08/measures-and-continuations/">Measures and Continuations</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I’ve always been interested in measure theory.  I’m not even sure why, exactly.
-Probably because it initially seemed so mysterious to me.  As an undergrad,
-measure theory was this unknown, exotic key to <em>truly</em> understanding
-probability.</p>
-
-<p>Well, sort of.  It’s certainly the key to understanding formal probability,
-but it no longer seems all that exotic, nor really necessary for grokking what
-I’d call the true essence of probability.  It’s pretty much real analysis with
-specialized attention paid to notions of factoring (independence) and ratios
-(conditioning).  Nowadays I relate it moreso to accounting; not the most
-inspiring of subjects, but necessary if you want to make sure everything adds
-up the way you think it should.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/08/measures-and-continuations/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/12/21/basic-ec2-management-with-ansible/">Basic EC2 Management With Ansible</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>EC2 is cool.  The ability to dynamically spin up a whack of free-to-cheap
-server instances anywhere in the world at any time, is.. well, pretty mean.
-Need to run a long computation job?  Scale up a distributed system?  Reduce
-latency to clients in a particular geographical region?  YEAH WE CAN DO THAT.</p>
-
-<p>The EC2 Management Console is a pretty great tool in of itself.  Well laid-out
-and very responsive.  But for a hacker’s hacker, a great tool to manage EC2
-instances (amongst other things) is Ansible, which provides a way to automate
-tasks over an arbitrary number of servers, concurrently.</p>
-
-<p>With EC2 and Ansible you can rapidly find yourself controlling an amorphous,
-globally-distributed network of servers that are eager to do your bidding.</p>
-
-<p><img src="http://i.imgur.com/EE2uqkU.jpg" /></p>
-
-<p>Again.. pretty mean. </p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/12/21/basic-ec2-management-with-ansible/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/12/20/side-projects/">Managing Learning as a Side Project</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I regularly find myself wanting to learn too many things at once.  This might
-be justifiable in some sense; there’s an awful lot out there to learn.  Often,
-skimming over some topic or other feels like enough to develop a sufficiently
-high-level model of what it is or how it works.  Armed with that (dangerously
-small amount of) knowledge, however, the urge to pick up some other topic tends
-to arise..  and so the process repeats.</p>
-
-<p>This is all well and good in order to survey what’s out there, but left
-unchecked, a survey of topics is all one might get.  <em>Le dilettantisme</em> can be
-understandable, but never desirable.</p>
-
-<p>Some time ago, I decided to try restricting myself to learning only one
-particular topic for two weeks at a time, as a bit of a side project.  Think of
-it as a ‘learning sprint’, if you will.  The idea is that the time between
-iterations is sufficiently short to ensure that one can’t hunger too badly to
-switch to some other topic mid-sprint.  At the same time, each iteration is
-lengthy enough to ensure a reasonable amount of immersion and depth.</p>
-
-<p>I managed a single iteration, but due to travel and a lack of conviction about
-the whole thing, never started another.  I think I’m going to start again, but
-with a little more intent this time.</p>
-
-<p>Two weeks can be a long-as time for some topics, though, so I believe I’ll work
-in one-to-two week commitments, depending on the subject.</p>
-
-<p>To start, I’m going to choose <a href="http://zeromq.org/">0MQ</a>, a framework that I
-sort-of know and definitely love.  We’ve used it in production on a previous
-app I worked on, and I’ve even contributed to the official Ruby bindings.  But,
-I still have a lot to learn about it.</p>
-
-<p>So let’s see how it goes.</p>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/12/17/a-new-blog/">A New Blog</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I’ve been feeling an itch to write more often, and this seems as good a place
-as any to do it.  If anything here winds up being useful to anyone else, all
-the better.</p>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     
   
 </aside>
+
 
     </div>
   </div>

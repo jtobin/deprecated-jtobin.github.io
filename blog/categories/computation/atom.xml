@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: computation | jtobin.ca]]></title>
+  <link href="http://jtobin.ca/blog/categories/computation/atom.xml" rel="self"/>
+  <link href="http://jtobin.ca/"/>
+  <updated>2014-05-31T18:10:34+10:00</updated>
+  <id>http://jtobin.ca/</id>
+  <author>
+    <name><![CDATA[Jared Tobin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sampling Functions and Generative Models]]></title>
+    <link href="http://jtobin.ca/blog/2014/03/17/sampling-functions-vs-generative-models/"/>
+    <updated>2014-03-17T08:20:55+10:00</updated>
+    <id>http://jtobin.ca/blog/2014/03/17/sampling-functions-vs-generative-models</id>
+    <content type="html"><![CDATA[<p>The term ‘probability distribution’ is actually pretty vague.  A probability
+distribution is an abstract object that can be distinguished uniquely (i.e.
+from other probability distributions) by way of any of a bunch of concrete
+representations.  Probability density or mass functions, moment generating
+functions, characteristic functions, cumulative distribution functions, random
+variables, and measures all reify a probability distribution as something
+tangible that can be worked with.  Image measures in particular are sometimes
+called ‘distributions’, though they still just form a single possible
+reification of the underlying concept.  In formal probability theory the term
+‘law’ is often used to refer to the abstract object being characterized.</p>
+
+<p>Different characterizations are useful when doing different kinds of work. 
+Measures are useful when doing proofs.  Probability densities and mass
+functions are useful for a whole whack of applications.  Moment generating
+functions are useful for exercises in introductory mathematical statistics
+courses.</p>
+
+<p>Sampling functions - procedures that produce samples from some target
+distribution - also characterize probability distributions uniquely.  They are
+an excellent basis for introducing and transforming uncertainty in
+probabilistic programming languages.  A sampling function takes as its sole
+input a <em>stream of randomness</em>, which is consumed and transformed to produce a
+sample from the distribution that it characterizes.  The stream can be a lazy
+list or, similarly, a pseudo-random number generator.</p>
+
+<p>Sampling functions are precursors to <em>generative models</em>: models that take both
+randomness and causal inputs as arguments and produce a possible effect.
+Generative models are the main currency of probabilistic programming; they
+specify a mapping between hypothesized causes and a probability distribution
+over effects.  Sampling functions are the basis for handling all uncertainty in
+several PP implementations.</p>
+
+<p>It’s useful to look at sampling functions and generative models to emphasize
+the distinction between the two.  In Haskelly pseudocode, they have the
+following types:</p>
+
+<p>``` haskell
+samplingFunction :: Randomness -&gt; Effect</p>
+
+<p>generativeModel  :: Causes -&gt; Randomness -&gt; Effect
+```</p>
+
+<p>It’s easy to see that a generative model, when provided with some causes, is
+itself a sampling function.</p>
+
+<p>We can use a monad to abstract out the provisioning of randomness and make
+everything a little cleaner.  Imagine ‘Observable’ to be a monad that handles
+the propagation of randomness in our functions; any type tagged with
+‘Observable’ is a probability distribution over some other type (and maybe we
+would run it with a function called <code>observe</code> or <code>sample</code>).  Using that, we can
+write the above as follows:</p>
+
+<p>``` haskell
+samplingFunction :: Observable Effect</p>
+
+<p>generativeModel  :: Causes -&gt; Observable Effect
+```</p>
+
+<p>Very clean.  Here it’s immediately clear that only difference between a
+sampling function and a model is the introduction of causes to the latter.  A
+generative model contains some internal logic that manipulates external causes
+in some way; a sampling function does not.</p>
+
+<p>You can see some in-progress development of this idea
+<a href="http://github.com/jtobin/observable">here</a> and
+<a href="http://github.com/glutamate/probably-baysig">here</a>.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

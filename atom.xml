@@ -1,83 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>jtobin.ca</title>
-  <meta name="author" content="Jared Tobin">
-
-  
-  <meta name="description" content="Lately I’ve been trying to do some magic by way of nonstandard interpretations
-of abstract syntax. One of the things that I’ve managed to grok along &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://jtobin.ca/">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/atom.xml" rel="alternate" title="jtobin.ca" type="application/atom+xml">
-  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-22260080-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body    class="collapse-sidebar sidebar-footer" >
-  <header role="banner"><hgroup>
-  <h1><a href="/">jtobin.ca</a>  &#47; <a href="/blog/archives">archives</a> &#47; <a href="/about">about</a> </h1>
-  
-  <div class="clear"></div>
-</hgroup>
-
-</header>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[jtobin.ca]]></title>
+  <link href="http://jtobin.ca/atom.xml" rel="self"/>
+  <link href="http://jtobin.ca/"/>
+  <updated>2014-05-31T18:10:34+10:00</updated>
+  <id>http://jtobin.ca/</id>
+  <author>
+    <name><![CDATA[Jared Tobin]]></name>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/05/30/sharing-in-haskell-edsls/">Sharing in Haskell EDSLs</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
-
-  <div class="entry-content"><p>Lately I’ve been trying to do some magic by way of nonstandard interpretations
+  
+  <entry>
+    <title type="html"><![CDATA[Sharing in Haskell EDSLs]]></title>
+    <link href="http://jtobin.ca/blog/2014/05/30/sharing-in-haskell-edsls/"/>
+    <updated>2014-05-30T09:37:53+10:00</updated>
+    <id>http://jtobin.ca/blog/2014/05/30/sharing-in-haskell-edsls</id>
+    <content type="html"><![CDATA[<p>Lately I’ve been trying to do some magic by way of nonstandard interpretations
 of abstract syntax.  One of the things that I’ve managed to grok along the way
 has been the problem of <em>sharing</em> in deeply-embedded languages.</p>
 
@@ -588,31 +529,15 @@ may be more convenient than others, depending on what you’re trying to do.</p>
 <a href="https://gist.github.com/jtobin/e3e945f3c761cbc6ad43">PHOAS</a> examples in the
 some gists.</p>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/03/17/sampling-functions-vs-generative-models/">Sampling Functions and Generative Models</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The term ‘probability distribution’ is actually pretty vague.  A probability
+  <entry>
+    <title type="html"><![CDATA[Sampling Functions and Generative Models]]></title>
+    <link href="http://jtobin.ca/blog/2014/03/17/sampling-functions-vs-generative-models/"/>
+    <updated>2014-03-17T08:20:55+10:00</updated>
+    <id>http://jtobin.ca/blog/2014/03/17/sampling-functions-vs-generative-models</id>
+    <content type="html"><![CDATA[<p>The term ‘probability distribution’ is actually pretty vague.  A probability
 distribution is an abstract object that can be distinguished uniquely (i.e.
 from other probability distributions) by way of any of a bunch of concrete
 representations.  Probability density or mass functions, moment generating
@@ -683,31 +608,15 @@ in some way; a sampling function does not.</p>
 <a href="http://github.com/jtobin/observable">here</a> and
 <a href="http://github.com/glutamate/probably-baysig">here</a>.</p>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/03/09/property-testing-in-ruby/">Property Testing in Ruby</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Testing properties of Haskell functions with
+  <entry>
+    <title type="html"><![CDATA[Property Testing in Ruby]]></title>
+    <link href="http://jtobin.ca/blog/2014/03/09/property-testing-in-ruby/"/>
+    <updated>2014-03-09T08:09:56+10:00</updated>
+    <id>http://jtobin.ca/blog/2014/03/09/property-testing-in-ruby</id>
+    <content type="html"><![CDATA[<p>Testing properties of Haskell functions with
 <a href="http://hackage.haskell.org/package/QuickCheck">QuickCheck</a> is easy and pretty
 enjoyable.  It turns out Ruby has a QuickCheck-like property testing library
 called <a href="http://github.com/hayeah/rantly">rantly</a>.</p>
@@ -973,31 +882,15 @@ is generating inputs from only a very small domain.</p>
 <p>IMO familiarity with a QuickCheck-like property testing library is good to
 have.  Rantly is not quite QuickCheck, but it’s still a joy to use.</p>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/03/07/notes-on-high-performance-browser-networking/">Notes on Another Guy&#8217;s Notes</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently bought Ilya Grigorik’s <a href="http://www.amazon.com/High-Performance-Browser-Networking-performance/dp/1449344763">High Performance Browser Networking</a>, which is an excellent book.  Also excellent is that Ilya wrote <a href="http://www.igvita.com/2013/09/29/retrospective-high-performance-browser-networking/">a great retrospective</a> on his book-writing process.  </p>
+  <entry>
+    <title type="html"><![CDATA[Notes On Another Guy's Notes]]></title>
+    <link href="http://jtobin.ca/blog/2014/03/07/notes-on-high-performance-browser-networking/"/>
+    <updated>2014-03-07T08:22:20+10:00</updated>
+    <id>http://jtobin.ca/blog/2014/03/07/notes-on-high-performance-browser-networking</id>
+    <content type="html"><![CDATA[<p>I recently bought Ilya Grigorik’s <a href="http://www.amazon.com/High-Performance-Browser-Networking-performance/dp/1449344763">High Performance Browser Networking</a>, which is an excellent book.  Also excellent is that Ilya wrote <a href="http://www.igvita.com/2013/09/29/retrospective-high-performance-browser-networking/">a great retrospective</a> on his book-writing process.  </p>
 
 <p>He made a few noteworthy points about the whole endeavour:</p>
 
@@ -1023,33 +916,17 @@ have.  Rantly is not quite QuickCheck, but it’s still a joy to use.</p>
 
 <p>Early and constant feedback is just <a href="https://www.youtube.com/watch?v=vQyrMMAbXgc">really important</a>.  This is something that I’ve had to constantly remind myself of when working on largely-solo projects.  Having others examine your work immediately gives you an idea of its promise.  Are the other parties excited by it?  Indifferent?  Confused?  Can they point out an area that you haven’t really understood all that well, or something important that you missed?</p>
 
-<p>And above all else, <a href="/blog/2014/01/27/the-unreasonable-effectiveness-of-habit/">consistency is sacrosanct</a>.  This idea is only getting reinforced with time. </p>
+<p>And above all else, <a href="http://jtobin.ca/blog/2014/01/27/the-unreasonable-effectiveness-of-habit/">consistency is sacrosanct</a>.  This idea is only getting reinforced with time. </p>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/01/27/the-unreasonable-effectiveness-of-habit/">The Unreasonable Effectiveness of Habit</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Exactly 41 days ago I started a project called <a href="http://750words.com">750 Words</a>,
+  <entry>
+    <title type="html"><![CDATA[The Unreasonable Effectiveness of Habit]]></title>
+    <link href="http://jtobin.ca/blog/2014/01/27/the-unreasonable-effectiveness-of-habit/"/>
+    <updated>2014-01-27T14:41:16+10:00</updated>
+    <id>http://jtobin.ca/blog/2014/01/27/the-unreasonable-effectiveness-of-habit</id>
+    <content type="html"><![CDATA[<p>Exactly 41 days ago I started a project called <a href="http://750words.com">750 Words</a>,
 which is simply a habit of writing a meagre 750 words every day.  They can be
 written on anything; just pick a topic (or several topics) in your head and get
 to writing about it.</p>
@@ -1073,35 +950,58 @@ indeed, don’t intend to.  The main reward to me has been  seeing a basic goal
 manifest as a string of X’s on a calendar; the little 750-word-minimum mind
 dumps (which constitute over 32,000 words now) are a bonus.</p>
 
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/27/the-unreasonable-effectiveness-of-habit/">Read on &rarr;</a>
-    </footer>
-  
+<!-- more -->
 
+<p>I’d often heard about the <a href="http://lifehacker.com/281626/jerry-seinfelds-productivity-secret">‘chain’ method</a>
+attributed to Jerry Seinfeld for boosting productivity, but kind of dismissed
+it as ‘not a good fit’ for me (whatever that means).  I’ve been productive in
+various endeavours by just <em>doing</em> the thing in question - playing musical
+instruments, swimming, coding - without feeling I actually needed to resort to
+keeping track of a formal chain or what have you.  Slavish devotion to schedule
+is a bit foreign to me.  And,
+<a href="http://calnewport.com/blog/2013/01/13/write-every-day-is-bad-advice-hacking-the-psychology-of-big-projects/">not everyone recommends it</a>.</p>
 
-    </article>
+<p>When it comes to writing, however, the same approach hasn’t seemed to work.</p>
+
+<p>I’ve always found technical writing to be a difficult task, and have
+historically resorted to binging to get the job done.  But, binging on a
+tough activity is unpleasant, unpleasant activities breed anxiety, anxiety
+breeds procrastination, and procrastination leads to guilt.  The cycle is what
+I would call ‘supremely sub-optimal’. </p>
+
+<p>I read a great book about a week ago called <a href="http://www.amazon.com/How-Write-Lot-Practical-Productive-ebook/dp/B001Y35G60">How to Write a Lot</a>
+which advocates as its primary advice <strong>allotting regular time to write, and
+writing during that time</strong>.  In other words, enforcing a habit by slavish
+devotion to schedule. </p>
+
+<p>It has now been six days since I started forcing myself to specifically do some
+technical writing for at least two hours a day, and marking an X down (using
+<a href="http://dontbreakthechain.com">dontbreakthechain.com</a>) when that goal is
+completed.  And, seemingly miraculously, much of a dissertation chapter has
+materialized from thin air - sans the anxiety, procrastination, and guilt I
+normally associate with working on it.</p>
+
+<p>Of course, I’m only six days into this ‘habit’ of mine, so let’s see how long
+it lasts in practice.  But, I really can’t imagine it going away: the decrease
+in stress and accretion of results I’ve observed in only six days has been
+amazing.  If I somehow start finding a two hour commitment too burdensome, I’ll
+just knock it back to one hour instead.  And if that winds up being too
+strenuous (in which case I probably have bigger problems to worry about) I can
+go to thirty minutes or even less.</p>
+
+<p><a href="http://en.wikipedia.org/wiki/The_Unreasonable_Effectiveness_of_Mathematics_in_the_Natural_Sciences">Math</a>
+and <a href="http://research.google.com/pubs/archive/35179.pdf">data</a> are well-known to be
+‘unreasonably effective’ in some sense, but habit just might be as well.</p>
+
+]]></content>
+  </entry>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/01/08/measures-and-continuations/">Measures and Continuations</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I’ve always been interested in measure theory.  I’m not even sure why, exactly.
+  <entry>
+    <title type="html"><![CDATA[Measures and Continuations]]></title>
+    <link href="http://jtobin.ca/blog/2014/01/08/measures-and-continuations/"/>
+    <updated>2014-01-08T13:32:05+10:00</updated>
+    <id>http://jtobin.ca/blog/2014/01/08/measures-and-continuations</id>
+    <content type="html"><![CDATA[<p>I’ve always been interested in measure theory.  I’m not even sure why, exactly.
 Probably because it initially seemed so mysterious to me.  As an undergrad,
 measure theory was this unknown, exotic key to <em>truly</em> understanding
 probability.</p>
@@ -1114,35 +1014,133 @@ specialized attention paid to notions of factoring (independence) and ratios
 inspiring of subjects, but necessary if you want to make sure everything adds
 up the way you think it should.</p>
 
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/08/measures-and-continuations/">Read on &rarr;</a>
-    </footer>
-  
+<!-- more -->
 
+<p>Measures are just one of many structures that uniquely characterize probability
+distributions, such as density functions, Fourier transforms, sampling
+functions, and so on.  They’ve been considered to be particularly useful for
+proving things, due to their generality.  They can be pretty abstract, but a
+perfectly suitable analogy of a measure for most practical purposes is a
+function that, when provided with a region, returns a volume.  Pretty simple.</p>
 
-    </article>
+<p>Volume also tends to be synonymous with integration, in that given a (positive)
+function, the integral of that function over some region defines a volume, or
+‘area under the curve’.  For more general functions, integrals can be thought
+of as returning a kind of center of mass.</p>
+
+<p>Integration and measures go hand in hand.  In abstract integration, one
+integrates a function over some region ‘against’ a measure, which assigns
+particular weights to infinitesimals of the underlying space.  Measures that
+tend to pop up in practice tend to be counting measure, Lebesgue measure, and
+assorted image measures corresponding to particular probability distributions.</p>
+
+<p>Imagine representing a measure on a computer.  One possible way to do it is to
+represent a measure as an integral directly.  Or, rather, as a generic
+<em>procedure</em> for integration.</p>
+
+<p>Consider the setup where you pass a measurable function to an integration
+procedure and it spits out a center of mass.  This has the convenient benefit
+that the responsibility for preserving measurability can be delegated to the
+function passed as an argument, rather than hard-coded into a measure itself
+(which might be very hard to do).  Implemented in a type system - take
+Haskell’s - we can implement a measure as something like</p>
+
+<pre><code>newtype Measure a = Measure { measure :: (a -&gt; Double) -&gt; Double }
+</code></pre>
+
+<p>which is a wrapper over a measurable function that we want to integrate.</p>
+
+<p>This is a restricted form of the <code>Cont</code> type used to define the continuation
+monad.  That makes sense; we’re defining a measure to be a program that should
+perform integration, and the particular implementation of that program defines
+a particular measure.  If we’re willing to play things kind of fast and loose,
+we can define measures by continuations proper:</p>
+
+<pre><code>newtype Cont r a = Cont { runCont :: (a -&gt; r) -&gt; r }
+
+instance Functor (Cont r) where
+  fmap f c = Cont $ \g -&gt; runCont c (g . f)
+
+instance Monad (Cont r) where
+  return x = Cont $ \f -&gt; f x
+  c &gt;&gt;= f  = Cont $ \d -&gt; runCont c $ \g -&gt; runCont (f g) d
+
+type Measure a = Cont Double a
+</code></pre>
+
+<p>There are three immediately interesting things about this setup:</p>
+
+<ul>
+  <li><code>fmap</code> creates an image or pushforward measure by pushing a function onto an
+existing measure</li>
+  <li><code>return</code> is the Dirac measure at a point</li>
+  <li><code>&gt;&gt;=</code> is a marginalizing operator</li>
+</ul>
+
+<p>There’s a big caveat in going this route: nonlinear continuation-y stuff like
+<code>callCC</code> will break everything, so you can’t use it in the context of measures.
+In practice defining a specific restricted type might be a bit safer, but we
+can just avoid using it.</p>
+
+<p>Usually we have something like $ \int f d\mathbb{P}$ in mathematical notation
+to denote the integral of a function $ f $ against a measure $\mathbb{P}$, so
+a more familiar version of <code>runCont</code> is</p>
+
+<pre><code>integrate :: (a -&gt; Double) -&gt; Measure a -&gt; Double
+integrate = flip runCont
+</code></pre>
+
+<p><code>integrate</code> defines the most basic ‘query’ of sorts on a measure.  You can
+query a measure to find its volume, center of mass, and various higher-ordere
+moments.  The simplest examples include:</p>
+
+<pre><code>volume :: Measure a -&gt; Double
+volume = integrate (const 1)
+
+expectation :: Measure a -&gt; Double
+expectation = integrate id
+
+variance :: Measure a -&gt; Double
+variance mu = integrate (^ 2) mu - expectation mu ^ 2
+</code></pre>
+
+<p>For any probability measure, <code>volume</code> should trivially return 1.</p>
+
+<p>To create measures, you can put together functions like</p>
+
+<pre><code>fromDensityCounting :: (a -&gt; Double) -&gt; [a] -&gt; Measure a
+fromDensityLebesgue :: (Double -&gt; Double) -&gt; Measure Double
+fromObservations    :: [a] -&gt; Measure a
+</code></pre>
+
+<p>that will create measures from the appropriate underlying structures. 
+<code>fromObservations</code> is probably the most interesting, being the least
+restrictive of the three.  You could also implement <code>fromSamplingFunction</code> to
+create a (random) measure from a sampling function and a seed.</p>
+
+<p>It’s easy to define stuff like abstract addition, subtraction, and
+multiplication on measures.  Just use <code>liftM2</code> and your arithmetic operator of
+choice.  In particular, abstract addition of measures corresponds to
+measure convolution.</p>
+
+<p>Viewing measures in this way is kind of neat, if of questionable practical
+value.  You can see a implementation of this stuff
+<a href="http://github.com/jtobin/measurable">here</a>, which includes a few examples to
+boot.  But in practice, you can’t seem to get very far with an implementation
+like this.  Exact computation involving probabilities is always going to be
+limited to toy cases.  One of the key morals of <a href="http://web.mit.edu/vkm/www/vkm-dissertation.pdf">Vikash Mansinghka’s excellent
+dissertation</a>, relevant here,
+is “don’t compute probabilities; instead, sample good guesses”.  </p>
+
+]]></content>
+  </entry>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/12/21/basic-ec2-management-with-ansible/">Basic EC2 Management With Ansible</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>EC2 is cool.  The ability to dynamically spin up a whack of free-to-cheap
+  <entry>
+    <title type="html"><![CDATA[Basic EC2 Management with Ansible]]></title>
+    <link href="http://jtobin.ca/blog/2013/12/21/basic-ec2-management-with-ansible/"/>
+    <updated>2013-12-21T14:26:56+10:00</updated>
+    <id>http://jtobin.ca/blog/2013/12/21/basic-ec2-management-with-ansible</id>
+    <content type="html"><![CDATA[<p>EC2 is cool.  The ability to dynamically spin up a whack of free-to-cheap
 server instances anywhere in the world at any time, is.. well, pretty mean.
 Need to run a long computation job?  Scale up a distributed system?  Reduce
 latency to clients in a particular geographical region?  YEAH WE CAN DO THAT.</p>
@@ -1159,35 +1157,340 @@ globally-distributed network of servers that are eager to do your bidding.</p>
 
 <p>Again.. pretty mean. </p>
 
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/12/21/basic-ec2-management-with-ansible/">Read on &rarr;</a>
-    </footer>
-  
+<!-- more -->
 
+<p>Here’s a quick example that elides most of the nitty-gritty details.  I’m going
+to spin up three micro instances in Asia Pacific.  To do that, I’m going to use
+an Ansible playbook, which is essentially a YAML file that describes a sequence
+of commands to be performed.  I’m going to delegate my local machine to handle
+that task, so I’m first going to store the following inventory in
+/etc/ansible/local:</p>
 
-    </article>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="p-Indicator">[</span><span class="nv">localhost</span><span class="p-Indicator">]</span>
+</span><span class="line"><span class="l-Scalar-Plain">127.0.0.1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The following playbook is what actually launches these guys.  Here’s its
+header:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>spin-up-instances.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="nn">---</span>
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Spin up some EC2 instances</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">127.0.0.1</span>
+</span><span class="line">  <span class="l-Scalar-Plain">connection</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">local</span>
+</span><span class="line">  <span class="l-Scalar-Plain">tasks</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Create security group</span>
+</span><span class="line">      <span class="l-Scalar-Plain">local_action</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">module</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ec2_group</span>
+</span><span class="line">        <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my-security-group</span>
+</span><span class="line">        <span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Access my-security-group</span>
+</span><span class="line">        <span class="l-Scalar-Plain">region</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ap-southeast-2</span>
+</span><span class="line">        <span class="l-Scalar-Plain">rules</span><span class="p-Indicator">:</span>
+</span><span class="line">          <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">proto</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tcp</span>
+</span><span class="line">            <span class="l-Scalar-Plain">from_port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">22</span>
+</span><span class="line">            <span class="l-Scalar-Plain">to_port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">22</span>
+</span><span class="line">            <span class="l-Scalar-Plain">cidr_ip</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0.0.0.0/0</span>
+</span><span class="line">
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Launch instances</span>
+</span><span class="line">      <span class="l-Scalar-Plain">local_action</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">module</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ec2</span>
+</span><span class="line">        <span class="l-Scalar-Plain">region</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ap-southeast-2</span>
+</span><span class="line">        <span class="l-Scalar-Plain">keypair</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">jtobin-aws</span>
+</span><span class="line">        <span class="l-Scalar-Plain">group</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my-security-group</span>
+</span><span class="line">        <span class="l-Scalar-Plain">instance_type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">t1.micro</span>
+</span><span class="line">        <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ami-3d128f07</span>
+</span><span class="line">        <span class="l-Scalar-Plain">count</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">3</span>
+</span><span class="line">        <span class="l-Scalar-Plain">wait</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yes</span>
+</span><span class="line">      <span class="l-Scalar-Plain">register</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ec2</span>
+</span><span class="line">
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Add instances to host group</span>
+</span><span class="line">      <span class="l-Scalar-Plain">local_action</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">add_host hostname= groupname=my-security-group</span>
+</span><span class="line">      <span class="l-Scalar-Plain">with_items</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ec2.instances</span>
+</span><span class="line">
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Tag instances</span>
+</span><span class="line">      <span class="l-Scalar-Plain">local_action</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ec2_tag resource= region=ap-southeast-2 state=present</span>
+</span><span class="line">      <span class="l-Scalar-Plain">with_items</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ec2.instances</span>
+</span><span class="line">      <span class="l-Scalar-Plain">args</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">tags</span><span class="p-Indicator">:</span>
+</span><span class="line">          <span class="l-Scalar-Plain">Name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Abrek</span>
+</span><span class="line">
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Give everyone a minute</span>
+</span><span class="line">      <span class="l-Scalar-Plain">pause</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">minutes=1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Roughly, the tasks I want performed are each declared with a name and follow
+the ‘tasks:’ line.  They’re relatively self-explanatory.  When Ansible runs
+this playbook, it will execute the tasks in the order they appear in the
+playbook.</p>
+
+<p>First I create a security group in Asia Pacific (Sydney) for all the instances
+I want to launch, and then go ahead and actually launch the instances.  You can
+see that I launch them as a local action on my machine.  I’m using micro
+instances (the most lightweight instance type available) and pick an Ubuntu LTS
+Server machine image for each.  I then do some bookkeeping and tag each
+instance with the name ‘Abrek’.  The final task just pauses the playbook
+execution long enough for the instances to get up and running.</p>
+
+<p>Fun fact: ‘Abrek’ was the name of one of the first two Soviet monkeys shot into
+space.  Today is apparently the 30th anniversary of his safe return.</p>
+
+<p>Now, I also want to install some software on each of these guys.  I’ll separate
+all that into two groups: some essentials, and a specialized stack consisting
+of 0MQ and supporting libraries.  To do that, I’ll create two separate files
+called ‘install-essentials.yml’ and ‘install-specialized.yml’.</p>
+
+<p>I’ll keep the essentials bare for now: git, gcc/g++, and make.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>install-essentials.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="nn">---</span>
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install git</span>
+</span><span class="line">  <span class="l-Scalar-Plain">apt</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pkg=git update_cache=yes</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install gcc</span>
+</span><span class="line">  <span class="l-Scalar-Plain">apt</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pkg=gcc</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install g++</span>
+</span><span class="line">  <span class="l-Scalar-Plain">apt</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pkg=g++</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install make</span>
+</span><span class="line">  <span class="l-Scalar-Plain">apt</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pkg=make</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>I can grab all of those via apt.  ‘update_cache’ is equivalent to ‘apt-get
+update’, which only needs to be done once.</p>
+
+<p>Next, the specialized stuff:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>install-specialized.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="nn">---</span>
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Grab 0MQ</span>
+</span><span class="line">  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
+</span><span class="line">    <span class="no">wget http://download.zeromq.org/zeromq-4.0.3.tar.gz</span>
+</span><span class="line">    <span class="no">creates=zeromq-4.0.3.tar.gz</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Unpack 0MQ</span>
+</span><span class="line">  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
+</span><span class="line">    <span class="no">tar -xzf zeromq-4.0.3.tar.gz</span>
+</span><span class="line">    <span class="no">creates=zeromq-4.0.3</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Get libsodium</span>
+</span><span class="line">  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
+</span><span class="line">    <span class="no">wget https://download.libsodium.org/libsodium/releases/libsodium-0.4.5.tar.gz</span>
+</span><span class="line">    <span class="no">creates=libsodium-0.4.5</span>
+</span><span class="line">    <span class="no">chdir=zeromq-4.0.3</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install libsodium</span>
+</span><span class="line">  <span class="l-Scalar-Plain">shell</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
+</span><span class="line">    <span class="no">tar xzf libsodium-0.4.5.tar.gz;</span>
+</span><span class="line">    <span class="no">cd libsodium-0.4.5;</span>
+</span><span class="line">    <span class="no">./configure &amp;&amp; make &amp;&amp; make check &amp;&amp; make install</span>
+</span><span class="line">    <span class="no">chdir=zeromq-4.0.3</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install 0MQ</span>
+</span><span class="line">  <span class="l-Scalar-Plain">shell</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
+</span><span class="line">    <span class="no">./configure; make; make install</span>
+</span><span class="line">    <span class="no">chdir=zeromq-4.0.3</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install libtool</span>
+</span><span class="line">  <span class="l-Scalar-Plain">apt</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pkg=libtool</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install automake</span>
+</span><span class="line">  <span class="l-Scalar-Plain">apt</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pkg=automake</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install automake</span>
+</span><span class="line">  <span class="l-Scalar-Plain">apt</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pkg=autoconf</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install uuid-dev</span>
+</span><span class="line">  <span class="l-Scalar-Plain">apt</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pkg=uuid-dev</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Grab CZMQ</span>
+</span><span class="line">  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
+</span><span class="line">    <span class="no">wget http://download.zeromq.org/czmq-2.0.3.tar.gz</span>
+</span><span class="line">    <span class="no">creates=czmq-2.0.3.tar.gz</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Unpack CZMQ</span>
+</span><span class="line">  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
+</span><span class="line">    <span class="no">tar xzf czmq-2.0.3.tar.gz</span>
+</span><span class="line">    <span class="no">creates=czmq-2.0.3</span>
+</span><span class="line">
+</span><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install CZMQ</span>
+</span><span class="line">  <span class="l-Scalar-Plain">shell</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
+</span><span class="line">    <span class="no">./configure &amp;&amp; make;</span>
+</span><span class="line">    <span class="no">ldconfig</span>
+</span><span class="line">    <span class="no">chdir=czmq-2.0.3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Lots going on here.  I use a variety of apt and shell commands to download and
+install everything I need.</p>
+
+<p>Now to add those tasks back into the ‘spin-up-instances.yml’ playbook so that
+the software gets installed right after the instances boot up.  I can append
+the following to that file:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>spin-up-instances.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Install essential and specialized software</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my-security-group</span>
+</span><span class="line">  <span class="l-Scalar-Plain">user</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ubuntu</span>
+</span><span class="line">  <span class="l-Scalar-Plain">sudo</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">True</span>
+</span><span class="line">  <span class="l-Scalar-Plain">tasks</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">include</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tasks/install-essentials.yml</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">include</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tasks/install-specialized.yml</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Let’s run the playbook and see those instances get launched.  I need to use the
+‘local’ inventory that I set up, so I pass that to ‘ansible-playbook’
+explicitly.</p>
+
+<p>Running it, we can see the security group being created, the instances popping
+up, and tags getting assigned:</p>
+
+<p><img src="http://jtobin.ca/images/ansible-first.png" /></p>
+
+<p>Our essential software getting pulled down:</p>
+
+<p><img src="http://jtobin.ca/images/ansible-third.png" /></p>
+
+<p>And the tail end of our 0MQ stack showing up before the play ends with a
+summary.</p>
+
+<p><img src="http://jtobin.ca/images/ansible-fourth.png" /></p>
+
+<p>For a quick sanity check to ensure that everything really did go as planned, I
+can look for the CZMQ header on each instance.  This time I’ll run a quick
+ad-hoc command, identifying the hosts via the ‘Abrek’ tag:</p>
+
+<p><img src="http://jtobin.ca/images/ansible-fifth.png" /></p>
+
+<p>Voila, three servers ready to roll.  Great stuff.</p>
+
+<p>To fill the missing details, you might want to check out the excellent <a href="http://www.ansibleworks.com/docs/">Ansible
+documentation</a>, as well as the great
+tutorials at <a href="http://http://answersforaws.com/">AnswersForAws</a>.</p>
+
+]]></content>
+  </entry>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/12/20/side-projects/">Managing Learning as a Side Project</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I regularly find myself wanting to learn too many things at once.  This might
+  <entry>
+    <title type="html"><![CDATA[Managing Learning as a Side Project]]></title>
+    <link href="http://jtobin.ca/blog/2013/12/20/side-projects/"/>
+    <updated>2013-12-20T12:12:02+10:00</updated>
+    <id>http://jtobin.ca/blog/2013/12/20/side-projects</id>
+    <content type="html"><![CDATA[<p>I regularly find myself wanting to learn too many things at once.  This might
 be justifiable in some sense; there’s an awful lot out there to learn.  Often,
 skimming over some topic or other feels like enough to develop a sufficiently
 high-level model of what it is or how it works.  Armed with that (dangerously
@@ -1219,86 +1522,19 @@ I still have a lot to learn about it.</p>
 
 <p>So let’s see how it goes.</p>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/12/17/a-new-blog/">A New Blog</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I’ve been feeling an itch to write more often, and this seems as good a place
+  <entry>
+    <title type="html"><![CDATA[A new blog]]></title>
+    <link href="http://jtobin.ca/blog/2013/12/17/a-new-blog/"/>
+    <updated>2013-12-17T07:46:26+10:00</updated>
+    <id>http://jtobin.ca/blog/2013/12/17/a-new-blog</id>
+    <content type="html"><![CDATA[<p>I’ve been feeling an itch to write more often, and this seems as good a place
 as any to do it.  If anything here winds up being useful to anyone else, all
 the better.</p>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    
-  
-</aside>
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  &copy; 2014 Jared Tobin
-  <span class="credit" style="float: right">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-
-
-
-
-
-
-
-
-
-
-  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    jax: ["input/TeX", "output/HTML-CSS"],
-    tex2jax: {
-      inlineMath: [ ['$', '$'] ],
-      displayMath: [ ['$$', '$$']],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    messageStyle: "none",
-    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
-  });
-  </script>
-  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
-</body>
-</html>
+</feed>
