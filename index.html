@@ -9,8 +9,8 @@
   <meta name="author" content="Jared Tobin">
 
   
-  <meta name="description" content="Lately I’ve been trying to do some magic by way of nonstandard interpretations
-of abstract syntax. One of the things that I’ve managed to grok along &hellip;">
+  <meta name="description" content="I don’t really do a ton of pair programming. By the nature of my work and
+geographical location I tend to work i) largely independently ii) on small &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +59,62 @@ of abstract syntax. One of the things that I’ve managed to grok along &hellip;
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2014/06/01/quick-remote-pairing/">Synchronous Remote Collaboration.</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I don’t really do a ton of pair programming.  By the nature of my work and
+geographical location I tend to work i) largely independently ii) on small
+teams iii) consisting of people who live about a dozen time zones away from me.</p>
+
+<p>I would <em>like</em> to do more, or at least try it out a bit more.  In the past I’ve
+done it very occasionally while trying to pick up something completely new from
+an expert, but I think the experience would be more valuable while working on
+something familiar but tough, or even just for a change of pace now and then.</p>
+
+<p>In the past I’ve used [join.me][6] for screen sharing plus voice.  I found
+it to be lighter-weight and better quality than Skype.  But that already seems
+to be a bit old-fashioned nowadays; I’ve since taken to using Hangouts for most
+of my calls, and I’d rather be able to work with people more interactively than
+screen sharing will allow.</p>
+
+<p>Since servers/instances on your cloud provider of choice are so cheap and easy
+to manage these days, I decided to put together a quick pairing environment
+using <a href="http://www.vagrantup.com" title="Vagrant">Vagrant</a>, <a href="http://aws.amazon.com" title="AWS CLI">AWS</a>, <a href="http://www.ansible.com/home" title="Ansible">Ansible</a>, and <a href="http://tmux.sourceforge.net/" title="tmux">tmux</a>.  The idea is that
+when you’d like to collaborate with someone or other, you just quickly fire up
+a cloud instance with all your favourite junk on it, ssh (or mosh) in, and get
+right to work in a familiar environment.  Everyone connects to the same tmux
+session on an ephemereal cloud instance, which is then just halted or destroyed
+as soon as you get bored of each others’ company.</p>
+
+<p>I’ve created a Github repo <a href="https://github.com/jtobin/pair-up" title="pair-up">here</a> that hopefully makes it quite easy to get
+this setup going.  Feel free to use that as a base for your own setup if you’d
+like to try it for yourself.  It’s even pretty much plug and play so long as
+you enjoy vim, tmux, and all of my configuration settings (ps, I re-bind the
+tmux prefix to C-s).</p>
+
+<p>TODO: build a custom AMI to dodge the long provisioning waits.</p>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>

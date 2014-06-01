@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: haskell | jtobin.ca]]></title>
+  <link href="http://jtobin.ca/blog/categories/haskell/atom.xml" rel="self"/>
+  <link href="http://jtobin.ca/"/>
+  <updated>2014-06-01T21:20:22+10:00</updated>
+  <id>http://jtobin.ca/</id>
+  <author>
+    <name><![CDATA[Jared Tobin]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sharing in Haskell EDSLs]]></title>
+    <link href="http://jtobin.ca/blog/2014/05/30/sharing-in-haskell-edsls/"/>
+    <updated>2014-05-30T09:37:53+10:00</updated>
+    <id>http://jtobin.ca/blog/2014/05/30/sharing-in-haskell-edsls</id>
+    <content type="html"><![CDATA[<p>Lately I’ve been trying to do some magic by way of nonstandard interpretations
+of abstract syntax.  One of the things that I’ve managed to grok along the way
+has been the problem of <em>sharing</em> in deeply-embedded languages.</p>
+
+<p>Here’s a simple illustration of the ‘vanilla’ sharing problem by way of plain
+Haskell; a function that computes 2^n:</p>
+
+<p><code>haskell
+naiveTree :: (Eq a, Num a, Num b) =&gt; a -&gt; a
+naiveTree 0 = 1
+naiveTree n = naiveTree (n - 1) + naiveTree (n - 1)
+</code></p>
+
+<p>This naive implementation is a poor way to roll as it is exponentially complex
+in n.  Look at how evaluation proceeds for something like <code>naiveTree 4</code>:</p>
+
+<pre><code>&gt; naiveTree 4
+&gt; naiveTree 3 + naiveTree 3
+&gt; naiveTree 2 + naiveTree 2 + naiveTree 2 + naiveTree 2
+&gt; naiveTree 1 + naiveTree 1 + naiveTree 1 + naiveTree 1
+  + naiveTree 1 + naiveTree 1 + naiveTree 1 + naiveTree 1
+&gt; naiveTree 0 + naiveTree 0 + naiveTree 0 + naiveTree 0
+  + naiveTree 0 + naiveTree 0 + naiveTree 0 + naiveTree 0
+  + naiveTree 0 + naiveTree 0 + naiveTree 0 + naiveTree 0
+  + naiveTree 0 + naiveTree 0 + naiveTree 0 + naiveTree 0
+&gt; 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+&gt; 16
+</code></pre>
+
+<p>Each recursive call doubles the number of function evaluations we need to make.
+Don’t wait up for <code>naiveTree 50</code> to return a value.</p>
+
+<p>A better way to write this function would be:</p>
+
+<p><code>haskell
+tree :: (Eq a, Num a, Num b) =&gt; a -&gt; a
+tree 0 = 1
+tree n =
+  let shared = tree (n - 1)
+  in  shared + shared
+</code> </p>
+
+<p>Here we store solutions to subproblems, and thus avoid having to recompute
+things over and over.  Look at how <code>tree 4</code> proceeds now:</p>
+
+<pre><code>&gt; tree 4
+&gt; let shared0 =
+      let shared1 = 
+          let shared2 =
+              let shared3 = 1 
+              in  shared3 + shared3
+          in  shared2 + shared2
+      in  shared1 + shared1
+  in  shared0 + shared0
+&gt; let shared0 =
+      let shared1 = 
+          let shared2 = 2
+          in  shared2 + shared2
+      in  shared1 + shared1
+  in  shared0 + shared0
+&gt; let shared0 =
+      let shared1 = 4
+      in  shared1 + shared1
+  in  shared0 + shared0
+&gt; let shared0 = 8
+  in  shared0 + shared0
+&gt; 16
+</code></pre>
+
+<p>You could say that Haskell’s <code>let</code> syntax enables <em>sharing</em> between
+computations; using it reduces the complexity of our tree implementation from
+$O(2^n)$ to $O(n)$.  <code>tree 50</code> now returns instantly:</p>
+
+<pre><code>&gt; tree 50
+1125899906842624
+</code></pre>
+
+<p>So let’s move everything over to an abstract syntax setting and see how the
+results translate there.</p>
+
+<p>Let’s start with a minimalist language, known in some circles as Hutton’s
+Razor.  While puny, it is sufficiently expressive to illustrate the subtleties
+of this whole sharing business:</p>
+
+<p>``` haskell
+data Expr =
+    Lit Int
+  | Add Expr Expr
+  deriving (Eq, Ord, Show)</p>
+
+<p>instance Num Expr where
+  fromInteger = Lit . fromInteger
+  (+)         = Add</p>
+
+<p>eval :: Expr -&gt; Int
+eval (Lit d)     = d
+eval (Add e0 e1) = eval e0 + eval e1
+```</p>
+
+<p>I’ve provided a <code>Num</code> instance so that we can conveniently write expressions in
+this language.  We can use conventional notation and extract abstract syntax
+for free by specifying a particular type signature:</p>
+
+<pre><code>&gt; 1 + 1 :: Expr
+Add (Lit 1) (Lit 1)
+</code></pre>
+
+<p>And of course we can use <code>eval</code> to evaluate things:</p>
+
+<pre><code>&gt; eval (1 + 1 :: Expr)
+2
+</code></pre>
+
+<p>Due to the <code>Num</code> instance and the polymorphic definitions of <code>naiveTree</code> and
+<code>tree</code>, these functions will automatically work on our expression type.  Check
+them out:</p>
+
+<pre><code>&gt; naiveTree 2 :: Expr
+Add (Add (Lit 1) (Lit 1)) (Add (Lit 1) (Lit 1))
+
+&gt; tree 2 :: Expr
+Add (Add (Lit 1) (Lit 1)) (Add (Lit 1) (Lit 1))
+</code></pre>
+
+<p>Notice there’s a quirk here: each of these functions - having wildly different
+complexities - yields the same abstract syntax, implying that <code>tree</code> is no
+more efficient than <code>naiveTree</code> when it comes to dealing with this expression
+type.  That means..</p>
+
+<pre><code>&gt; eval (tree 50 :: Expr)
+-- ain't happening
+</code></pre>
+
+<p>So there is a big problem here: Haskell’s <code>let</code> syntax doesn’t carry its
+sharing over to our embedded language.  Equivalently, the embedded language is
+<em>not expressive enough</em> to represent sharing in its own abstract syntax.</p>
+
+<p>There are a few ways to get around this.</p>
+
+<h2 id="memoizing-evaluation">Memoizing Evaluation</h2>
+
+<p>For some interpretations (like evaluation) we can use a memoization library.
+Here we can use <code>Data.StableMemo</code> to define a clean and simple evaluator:</p>
+
+<p>``` haskell
+import Data.StableMemo</p>
+
+<p>memoEval :: Expr -&gt; Int
+memoEval = go where
+  go = memo eval
+  eval (Lit i)     = i
+  eval (Add e0 e1) = go e0 + go e1
+```</p>
+
+<p>This will very conveniently handle any grimy details of caching intermediate
+computations.  It passes the <code>tree 50</code> test just fine:</p>
+
+<pre><code>&gt; memoEval (tree 50 :: Expr)
+1125899906842624
+</code></pre>
+
+<p>Some other interpretations are still inefficient; a similar <code>memoPrint</code>
+function will still dump out a massive syntax tree due to the limited
+expressiveness of the embedded language.  The memoizer doesn’t really allow us
+to <em>observe</em> sharing, if we’re interested in doing that for some reason.</p>
+
+<h2 id="observing-implicit-sharing">Observing Implicit Sharing</h2>
+
+<p>We can actually use GHC’s internal sharing analysis to recover any implicit
+sharing present in an embedded expression.  This is the technique introduced by
+Andy Gill’s <a href="http://www.cs.uu.nl/wiki/pub/Afp/CourseLiterature/Gill-09-TypeSafeReification.pdf">Type Safe Observable Sharing In Haskell</a>
+and implemented in the <code>data-reify</code> library on
+<a href="http://hackage.haskell.org/package/data-reify">Hackage</a>.  It’s as
+technically unsafe as it sounds, but in practice has the benefits of being both
+relatively benign and minimally intrusive on the existing language.</p>
+
+<p>Here is the extra machinery required to observe implicit sharing in our <code>Expr</code>
+type:</p>
+
+<p>``` haskell
+{-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE TypeFamilies #-}</p>
+
+<p>import Control.Applicative
+import Data.Reify hiding (Graph)
+import qualified Data.Reify as Reify
+import System.IO.Unsafe</p>
+
+<p>data ExprF e =
+    LitF Int
+  | AddF e e
+  deriving (Eq, Ord, Show, Functor)</p>
+
+<p>instance MuRef Expr where
+  type DeRef Expr        = ExprF
+  mapDeRef f (Add e0 e1) = AddF &lt;$&gt; f e0 &lt;*&gt; f e1
+  mapDeRef _ (Lit v)     = pure (LitF v)
+```</p>
+
+<p>We need to make <code>Expr</code> an instance of the <code>MuRef</code> class, which loosely provides
+a mapping between the <code>Expr</code> and <code>ExprF</code> types.  <code>ExprF</code> itself is a so-called
+‘pattern functor’, which is a parameterized type in which recursive points are
+indicated by the parameter.  We need the <code>TypeFamilies</code> pragma for
+instantiating the <code>MuRef</code> class, and <code>DeriveFunctor</code> eliminates the need to
+manually instantiate a <code>Functor</code> instance for <code>ExprF</code>.</p>
+
+<p>Writing <code>MuRef</code> instances is pretty easy.  For more complicated types you can
+often use <code>Data.Traversable.traverse</code> in order to provide the required
+implementation for <code>mapDeRef</code>
+(<a href="https://stackoverflow.com/questions/23825800/how-to-define-a-muref-instance-for-this-nontrivial-expression-type">example</a>).</p>
+
+<p>With this in place we can use <code>reifyGraph</code> from <code>data-reify</code> in order to
+observe the implicit sharing.  Let’s try this on a bite-sized <code>tree 2</code> and note
+that it is an IO action:</p>
+
+<pre><code>&gt; reifyGraph (tree 2 :: Expr)
+let [(1,AddF 2 2),(2,AddF 3 3),(3,LitF 1)] in 1
+</code></pre>
+
+<p>Here we get an abstract syntax <em>graph</em> - rather than a tree - and sharing has
+been made explicit.</p>
+
+<p>We can write an interpreter for expressions by internally reifying them as
+graphs and then working on those.  <code>reifyGraph</code> is an IO action, but since its
+effects are pretty tame I don’t feel too bad about wrapping calls to it in
+<code>unsafePerformIO</code>.  Interpreting these graphs must be handled a little
+differently from interpreting a tree; a naive ‘tree-like’ evaluator 
+will eliminate sharing undesirably:</p>
+
+<p><code>haskell
+naiveEval :: Expr -&gt; Int
+naiveEval expr = gEval reified where
+  reified = unsafePerformIO $ reifyGraph expr
+  gEval (Reify.Graph env r) = go r where
+    go j = case lookup j env of
+      Just (AddF a b) -&gt; go a + go b
+      Just (LitF d)   -&gt; d
+      Nothing         -&gt; 0
+</code></p>
+
+<p>This evaluator fails the <code>tree 50</code> test:</p>
+
+<pre><code>&gt; naiveEval (tree 50)
+-- hang
+</code></pre>
+
+<p>We need to use a more appropriately graph-y method to traverse and interpret
+this (directed, acyclic) graph.  Here’s an idea:</p>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Topological_sorting">topologically sort</a> the
+graph, yielding a linear ordering of vertices such that for every edge
+$u \to v$, $v$ is ordered before $u$.</li>
+  <li>iterate through the sorted vertices, interpreting them as desired and storing
+the interpretation</li>
+  <li>look up the previously-interpreted vertices as needed</li>
+</ul>
+
+<p>We can use the <code>Data.Graph</code> module from the <code>containers</code> library to deal with
+the topological sorting and vertex lookups.  The following graph-based
+evaluator gets the job done:</p>
+
+<p>``` haskell
+import Data.Graph
+import Data.Maybe</p>
+
+<p>graphEval :: Expr -&gt; Int
+graphEval expr = consume reified where
+  reified = unsafePerformIO (toGraph &lt;$&gt; reifyGraph expr)
+  toGraph (Reify.Graph env _) = graphFromEdges . map toNode $ env
+  toNode (j, AddF a b) = (AddF a b, j, [a, b])
+  toNode (j, LitF d)   = (LitF d, j, [])</p>
+
+<p>consume :: Eq a =&gt; (Graph, Vertex -&gt; (ExprF a, a, b), c) -&gt; Int
+consume (g, vmap, _) = go (reverse . topSort $ g) [] where
+  go [] acc = snd $ head acc
+  go (v:vs) acc =
+    let nacc = evalNode (vmap v) acc : acc
+    in  go vs nacc</p>
+
+<p>evalNode :: Eq a =&gt; (ExprF a, b, c) -&gt; [(a, Int)] -&gt; (b, Int)
+evalNode (LitF d, k, _)   _ = (k, d)
+evalNode (AddF a b, k, _) l =
+  let v = fromJust ((+) &lt;$&gt; lookup a l &lt;*&gt; lookup b l)
+  in  (k, v)
+```</p>
+
+<p>In a serious implementation I’d want to use a more appropriate caching
+structure and avoid the partial functions like <code>fromJust</code> and <code>head</code>, but you
+get the point.  In any case, this evaluator passes the <code>tree 50</code> test without
+issue:</p>
+
+<pre><code>&gt; graphEval (tree 50)
+1125899906842624
+</code></pre>
+
+<h2 id="making-sharing-explicit">Making Sharing Explicit</h2>
+
+<p>Instead of working around the lack of sharing in our language, we can augment
+it by adding the necessary sharing constructs.  In particular, we can add our
+own let-binding that piggybacks on Haskell’s <code>let</code>.  Here’s an enhanced
+language (using the same <code>Num</code> instance as before):</p>
+
+<p><code>haskell
+data Expr =
+    Lit Int
+  | Add Expr Expr
+  | Let Expr (Expr -&gt; Expr)
+</code></p>
+
+<p>The new <code>Let</code> constructor implements <em>higher-order abstract syntax</em>, or HOAS.
+There are some immediate consequences of this: we can’t derive instances of our
+language for typeclasses like <code>Eq</code>, <code>Ord</code>, and <code>Show</code>, and interpreting
+everything becomes a bit more painful.  But, we don’t need to make any use of
+<code>data-reify</code> in order to share expressions, since the language now handles that
+'a la carte.  Here’s an efficient evaluator:</p>
+
+<p><code>haskell
+eval :: Expr -&gt; Int
+eval (Lit d)     = d
+eval (Add e0 e1) = eval e0 + eval e1
+eval (Let e0 e1) =
+  let shared = Lit (eval e0)
+  in  eval (e1 shared)
+</code></p>
+
+<p>In particular, note that we need a sort of back-interpreter to re-embed shared
+expressions into our language while interpreting them.  Here we use <code>Lit</code> to
+do that, but this is more painful if we want to implement, say, a pretty
+printer; in that case we need a parser such that <code>print (parse x) == x</code> (see 
+<a href="https://www.cs.utexas.edu/~wcook/Drafts/2012/graphs.pdf">here</a>).</p>
+
+<p>We also can’t use the existing <code>tree</code> function.  Here’s the HOAS equivalent,
+which is no longer polymorphic in its return type:</p>
+
+<p><code>haskell
+tree :: (Num a, Eq a) =&gt; a -&gt; Expr
+tree 0 = 1
+tree n = Let (tree (n - 1)) (\shared -&gt; shared + shared)
+</code></p>
+
+<p>Using that, we can see that sharing is preserved just fine:</p>
+
+<pre><code>&gt; eval (tree 50)
+1125899906842624
+</code></pre>
+
+<p>Another way to make sharing explicit is to use a paramterized HOAS, known as
+PHOAS.  This requires the greatest augmentation of the original language
+(recycling the same <code>Num</code> instance):</p>
+
+<p>``` haskell
+data Expr a =
+    Lit Int
+  | Add (Expr a) (Expr a)
+  | Let (Expr a) (a -&gt; Expr a)
+  | Var a</p>
+
+<p>eval :: Expr Int -&gt; Int
+eval (Lit d)     = d
+eval (Var v)     = v
+eval (Add e0 e1) = eval e0 + eval e1
+eval (Let e f)   = eval (f (eval e))
+```</p>
+
+<p>Here we parameterize the expression type and add both <code>Let</code> and <code>Var</code>
+constructors to the language.  Sharing expressions explicitly now takes a
+slightly different form than in the HOAS version:</p>
+
+<p><code>haskell
+tree :: (Num a, Eq a) =&gt; a -&gt; Expr b
+tree 0 = 1
+tree n = Let (tree (n - 1)) ((\shared -&gt; shared + shared) . Var)
+</code></p>
+
+<p>The <code>Var</code> term wraps the intermediate computation, which is then passed to the
+semantics-defining lambda.  Sharing is again preserved in the language:</p>
+
+<pre><code>&gt; eval $ tree 50
+1125899906842624
+</code></pre>
+
+<p>Here, however, we don’t need the same kind of back-interpreter that we did when
+using HOAS.  It’s easy to write a pretty-printer that observes sharing, for
+example (from <a href="http://ropas.snu.ac.kr/~bruno/papers/ASGDSL.pdf">here</a>):</p>
+
+<p><code>haskell
+text e = go e 0 where
+  go (Lit j)     _ = show j
+  go (Add e0 e1) c = "(Add " ++ go e0 c ++ " " ++ go e1 c ++ ")"
+  go (Var x) _     = x
+  go (Let e0 e1) c = "(Let " ++ v ++ " " ++ go e0 (c + 1) ++
+                     " in " ++ go (e1 v) (c + 1) ++ ")"
+    where v = "v" ++ show c
+</code></p>
+
+<p>Which yields the following string representation of our syntax:</p>
+
+<pre><code>&gt; putStrLn . text $ tree 2
+(Let v0 (Let v1 1 in (Add v1 v1)) in (Add v0 v0))
+</code></pre>
+
+<h2 id="cluing-up">Cluing up</h2>
+
+<p>I’ve gone over several methods of handling sharing in embedded languages:
+an external memoizer, observable (implicit) sharing, and adding explicit
+sharing via adding a HOAS or PHOAS let-binding to the original language.  Some
+may be more convenient than others, depending on what you’re trying to do.</p>
+
+<p>I’ve dumped code for the
+<a href="https://gist.github.com/jtobin/89d741df8aaaa33eb567">minimal</a>,
+<a href="https://gist.github.com/jtobin/3fc26d852af9e82e378e">HOAS</a>, and
+<a href="https://gist.github.com/jtobin/e3e945f3c761cbc6ad43">PHOAS</a> examples in
+some gists.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: infrastructure | jtobin.ca]]></title>
   <link href="http://jtobin.ca/blog/categories/infrastructure/atom.xml" rel="self"/>
   <link href="http://jtobin.ca/"/>
-  <updated>2014-05-31T19:44:28+10:00</updated>
+  <updated>2014-06-01T21:20:22+10:00</updated>
   <id>http://jtobin.ca/</id>
   <author>
     <name><![CDATA[Jared Tobin]]></name>
@@ -12,6 +12,46 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Synchronous Remote Collaboration.]]></title>
+    <link href="http://jtobin.ca/blog/2014/06/01/quick-remote-pairing/"/>
+    <updated>2014-06-01T16:30:48+10:00</updated>
+    <id>http://jtobin.ca/blog/2014/06/01/quick-remote-pairing</id>
+    <content type="html"><![CDATA[<p>I don’t really do a ton of pair programming.  By the nature of my work and
+geographical location I tend to work i) largely independently ii) on small
+teams iii) consisting of people who live about a dozen time zones away from me.</p>
+
+<p>I would <em>like</em> to do more, or at least try it out a bit more.  In the past I’ve
+done it very occasionally while trying to pick up something completely new from
+an expert, but I think the experience would be more valuable while working on
+something familiar but tough, or even just for a change of pace now and then.</p>
+
+<p>In the past I’ve used [join.me][6] for screen sharing plus voice.  I found
+it to be lighter-weight and better quality than Skype.  But that already seems
+to be a bit old-fashioned nowadays; I’ve since taken to using Hangouts for most
+of my calls, and I’d rather be able to work with people more interactively than
+screen sharing will allow.</p>
+
+<p>Since servers/instances on your cloud provider of choice are so cheap and easy
+to manage these days, I decided to put together a quick pairing environment
+using <a href="http://www.vagrantup.com" title="Vagrant">Vagrant</a>, <a href="http://aws.amazon.com" title="AWS CLI">AWS</a>, <a href="http://www.ansible.com/home" title="Ansible">Ansible</a>, and <a href="http://tmux.sourceforge.net/" title="tmux">tmux</a>.  The idea is that
+when you’d like to collaborate with someone or other, you just quickly fire up
+a cloud instance with all your favourite junk on it, ssh (or mosh) in, and get
+right to work in a familiar environment.  Everyone connects to the same tmux
+session on an ephemereal cloud instance, which is then just halted or destroyed
+as soon as you get bored of each others’ company.</p>
+
+<p>I’ve created a Github repo <a href="https://github.com/jtobin/pair-up" title="pair-up">here</a> that hopefully makes it quite easy to get
+this setup going.  Feel free to use that as a base for your own setup if you’d
+like to try it for yourself.  It’s even pretty much plug and play so long as
+you enjoy vim, tmux, and all of my configuration settings (ps, I re-bind the
+tmux prefix to C-s).</p>
+
+<p>TODO: build a custom AMI to dodge the long provisioning waits.</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Basic EC2 Management with Ansible]]></title>
