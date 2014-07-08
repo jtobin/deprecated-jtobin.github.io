@@ -169,7 +169,7 @@ expressions.  We just have to write functions we’re interested in generically
 with a concretely-typed argument.  Some examples:</p>
 
 <pre><code>&gt; :t diff (\x -&gt; 2 * x ^ 2) 
-diff (\x -&gt; 2 * x ^ 2) :: Num a =&gt; a
+diff (\x -&gt; 2 * x ^ 2) :: Num a =&gt; a -&gt; a
 
 &gt; diff (\x -&gt; 2 * x ^ 2) (Lit 1)
 Mul (Add (Mul (Lit 1) (Lit 1)) (Mul (Lit 1) (Lit 1))) (Lit 2)
