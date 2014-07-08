@@ -373,8 +373,9 @@ Add (Mul (Add (Var "x") (Var "x")) (Lit 2)) (Add (Mul (Mul (Var "x")
 </code></pre>
 
 <p>But there are also some more involved optimizations that can be useful for some
-types of language.  The basic one I’ve been using above, for example, has no
-explicit support for sharing common subexpressions.  You’ll recall from <a href="/blog/blog/2014/05/30/sharing-in-haskell-edsls/">one of my previous posts</a> that we
+languages.  The basic language I’ve been using above, for example, has no
+explicit support for sharing common subexpressions.  You’ll recall from <a href="/blog/blog/2014/05/30/sharing-in-haskell-edsls/">one of
+my previous posts</a> that we
 have a variety of methods to do that in Haskell EDSLs, including some that
 allow sharing to be observed without modifying the underlying language.  We can
 use <code>data-reify</code>, for example, to observe any implicit sharing in expressions:</p>
