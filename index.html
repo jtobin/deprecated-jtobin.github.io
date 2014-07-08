@@ -189,9 +189,9 @@ doing something like this:</p>
 Mul (Add (Mul (Var "x") (Lit 1)) (Mul (Lit 1) (Var "x"))) (Lit 2)
 </code></pre>
 
-<p>and then, given that expression, reify a direct function for the derivative by
-substituting over the captured variable and evaluating everything.  Here’s some
-initial machinery to handle that:</p>
+<p>and then, given that expression, reifying a direct function for the derivative
+by substituting over the captured variable and evaluating everything.  Here’s
+some initial machinery to handle that:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
