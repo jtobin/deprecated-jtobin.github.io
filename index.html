@@ -374,8 +374,7 @@ Add (Mul (Add (Var "x") (Var "x")) (Lit 2)) (Add (Mul (Mul (Var "x")
 
 <p>But there are also some more involved optimizations that can be useful for some
 languages.  The basic language I’ve been using above, for example, has no
-explicit support for sharing common subexpressions.  You’ll recall from <a href="/blog/blog/2014/05/30/sharing-in-haskell-edsls/">one of
-my previous posts</a> that we
+explicit support for sharing common subexpressions.  You’ll recall from <a href="/blog/2014/05/30/sharing-in-haskell-edsls/">one of my previous posts</a> that we
 have a variety of methods to do that in Haskell EDSLs, including some that
 allow sharing to be observed without modifying the underlying language.  We can
 use <code>data-reify</code>, for example, to observe any implicit sharing in expressions:</p>
@@ -395,7 +394,7 @@ let [(5,LitF 2),(1,AddF 2 6),(3,AddF 4 4),(6,AddF 7 10),(2,MulF 3 5),
 (10,MulF 3 8),(8,MulF 4 4),(7,MulF 8 3),(4,VarF "x")] in 1
 </code></pre>
 
-<p>With an appropriate <a href="/blog/blog/2014/05/30/sharing-in-haskell-edsls/">graph evaluator</a>
+<p>With an appropriate <a href="/blog/2014/05/30/sharing-in-haskell-edsls/">graph evaluator</a>
 we can cut down the size of the syntax we have to traverse substantially.</p>
 
 <p>Happy automasymbolic differentiating!</p>
