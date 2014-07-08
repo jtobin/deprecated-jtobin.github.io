@@ -232,9 +232,8 @@ initial machinery to handle that:</p>
 
 <p>So, using this on the example above yields</p>
 
-<pre><code>&gt; let g e = eval . close e "x" 
-&gt; let testExpr = diff (\x -&gt; 2 * x ^ 2) (Var "x")
-&gt; g testExpr 1
+<pre><code>&gt; let testExpr = diff (\x -&gt; 2 * x ^ 2) (Var "x")
+&gt; eval . close (testExpr) "x" $ 1
 2
 </code></pre>
 
