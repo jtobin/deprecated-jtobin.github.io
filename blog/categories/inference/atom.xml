@@ -4,7 +4,7 @@
   <title><![CDATA[Category: inference | jtobin.ca]]></title>
   <link href="http://jtobin.ca/blog/categories/inference/atom.xml" rel="self"/>
   <link href="http://jtobin.ca/"/>
-  <updated>2014-07-07T23:38:15-02:30</updated>
+  <updated>2014-07-07T23:40:14-02:30</updated>
   <id>http://jtobin.ca/</id>
   <author>
     <name><![CDATA[Jared Tobin]]></name>
@@ -238,13 +238,19 @@ elimIdent (Mul e0 e1)     = Mul (elimIdent e0) (elimIdent e1)</p>
 <p>Which lets us do some work up-front:</p>
 
 <pre><code>&gt; let e = 2 * Var "x" ^ 2 + Var "x" ^ 4
-Add (Mul (Lit 2) (Mul (Var "x") (Var "x"))) (Mul (Mul (Var "x") (Var "x")) (Mul (Var "x") (Var "x")))
+Add (Mul (Lit 2) (Mul (Var "x") (Var "x"))) (Mul (Mul (Var "x") (Var "x"))
+(Mul (Var "x") (Var "x")))
 
 &gt; let ge = toDerivative "x" e
-Add (Mul (Add (Mul (Var "x") (Lit 1)) (Mul (Lit 1) (Var "x"))) (Lit 2)) (Add (Mul (Mul (Var "x") (Var "x")) (Add (Mul (Var "x") (Lit 1)) (Mul (Lit 1) (Var "x")))) (Mul (Add (Mul (Var "x") (Lit 1)) (Mul (Lit 1) (Var "x"))) (Mul (Var "x") (Var "x"))))
+Add (Mul (Add (Mul (Var "x") (Lit 1)) (Mul (Lit 1) (Var "x"))) (Lit 2))
+(Add (Mul (Mul (Var "x") (Var "x")) (Add (Mul (Var "x") (Lit 1)) (Mul
+(Lit 1) (Var "x")))) (Mul (Add (Mul (Var "x") (Lit 1)) (Mul (Lit 1)
+(Var "x"))) (Mul (Var "x") (Var "x"))))
 
 &gt; let geOptim = elimIdent ge
-Add (Mul (Add (Var "x") (Var "x")) (Lit 2)) (Add (Mul (Mul (Var "x") (Var "x")) (Add (Var "x") (Var "x"))) (Mul (Add (Var "x") (Var "x")) (Mul (Var "x") (Var "x"))))
+Add (Mul (Add (Var "x") (Var "x")) (Lit 2)) (Add (Mul (Mul (Var "x")
+(Var "x")) (Add (Var "x") (Var "x"))) (Mul (Add (Var "x") (Var "x")) (Mul
+(Var "x") (Var "x"))))
 
 &gt; eval . close "x" 1 $ geOptim
 8
@@ -258,7 +264,9 @@ allow sharing to be observed without modifying the underlying language.  We can
 use <code>data-reify</code>, for example, to observe any implicit sharing in expressions:</p>
 
 <pre><code>&gt; reifyGraph $ geOptim
-let [(1,AddF 2 6),(6,AddF 7 10),(10,MulF 11 12),(12,MulF 4 4),(11,AddF 4 4),(7,MulF 8 9),(9,AddF 4 4),(8,MulF 4 4),(2,MulF 3 5),(5,LitF 2),(3,AddF 4 4),(4,VarF "x")] in 1
+let [(1,AddF 2 6),(6,AddF 7 10),(10,MulF 11 12),(12,MulF 4 4),(11,AddF 4 4),
+(7,MulF 8 9),(9,AddF 4 4),(8,MulF 4 4),(2,MulF 3 5),(5,LitF 2),(3,AddF 4 4),
+(4,VarF "x")] in 1
 </code></pre>
 
 <p>And even make use of a <a href="http://hackage.haskell.org/package/data-reify-cse">handy library</a> found on Hackage
@@ -266,7 +274,8 @@ for performing common subexpression elimination on graphs returned by
 <code>reifyGraph</code>:</p>
 
 <pre><code>&gt; cse &lt;$&gt; reifyGraph geOptim
-let [(5,LitF 2),(1,AddF 2 6),(3,AddF 4 4),(6,AddF 7 10),(2,MulF 3 5),(10,MulF 3 8),(8,MulF 4 4),(7,MulF 8 3),(4,VarF "x")] in 1
+let [(5,LitF 2),(1,AddF 2 6),(3,AddF 4 4),(6,AddF 7 10),(2,MulF 3 5),
+(10,MulF 3 8),(8,MulF 4 4),(7,MulF 8 3),(4,VarF "x")] in 1
 </code></pre>
 
 <p>With an appropriate <a href="/blog/blog/2014/05/30/sharing-in-haskell-edsls/">graph evaluator</a>
