@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Monads are just monoids in the category of endofunctors - jtobin.ca</title>
+  <meta name="author" content="Jared Tobin">
+
+  
+  <meta name="description" content="The title of this post is a famous quote in Haskell circles. Supposedly when
+someone, somewhere exclaimed that they had trouble understanding monads &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jtobin.ca/blog/2014/12/03/monads-are-just-monoids-in-the-category-of-endofunctors/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="jtobin.ca" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-22260080-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jtobin.ca</a>  &#47; <a href="/blog/archives">archives</a> &#47; <a href="/about">about</a> </h1>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Monads Are Just Monoids in the Category of Endofunctors</h1>
+      
+    
+    
+      <p class="meta">
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The title of this post is a famous quote in Haskell circles.  Supposedly when
+someone, somewhere exclaimed that they had trouble understanding monads, they
+were met with a (tongue-in-cheek) reply of “monads are just monoids in the
+category of endofunctors, what’s the problem?”</p>
+
+<p>Does that make sense?  Yeah it does.  The category theory version is actually
+surprisingly easy to understand.</p>
+
+<p>First, <a href="http://en.wikipedia.org/wiki/Monoid">monoids</a> from the algebraic point
+of view.  I think you probably have to grok these before understanding the
+above quote becomes ‘surprisingly easy’.</p>
+
+<p>Formally, a monoid is a triple $(S, +, e)$ where</p>
+
+<ul>
+  <li>$\exists S$ a set</li>
+  <li>$\exists +: S \times S \to S$</li>
+  <li>$\exists e \in S$</li>
+</ul>
+
+<p>such that</p>
+
+<ul>
+  <li>$\forall a, b, c \in S: (a + b) + c = a + (b + c)$ (associativity)</li>
+  <li>$\forall a \in S: e + a = a + e = e$ (identity).</li>
+</ul>
+
+<p>Loosely, a monoid is a i) collection of things, ii) an associative way to glue
+those things together, and iii) an identity element.  Good examples of monoids
+are</p>
+
+<ul>
+  <li>(the integers, addition, 0)</li>
+  <li>(the integers, multiplication, 1)</li>
+  <li>(lists, concatenation, the empty list)</li>
+</ul>
+
+<p>The category theory version of monoids is more-or-less the same idea, but more
+general. I claim that the above algebraic concept of monoids is sufficient to
+understand the necessary correspondence to monads; for the category theory
+definition of monoids you can go to the
+<a href="http://en.wikipedia.org/wiki/Monoid_%28category_theory%29">Wikipedia</a> page.</p>
+
+<p>A <a href="http://en.wikipedia.org/wiki/Monad_(category_theory)">monad</a> on some
+category $C$ is a triple $(T, \mu, \nu)$ where</p>
+
+<ul>
+  <li>$\exists T$ an endofunctor on $C$</li>
+  <li>$\exists \mu: T \times T \to T$</li>
+  <li>$\exists \nu: I<em>{C} \to T$ where $I</em>{C}$ is the identity functor on $C$</li>
+</ul>
+
+<p>such that</p>
+
+<ul>
+  <li>$\mu(\mu(T \times T) \times T) = \mu(T \times \mu(T \times T))$ (associativity)</li>
+  <li>$\mu(\nu(T)) = \mu(T(\nu)) = T$ (identity).</li>
+</ul>
+
+<p>You don’t have to even know what an endofunctor or category is in order to see
+the general correspondence; swap in ‘endofunctor’ for ‘set’ and you’re most of
+the way there.  A monad is, unironically, just a monoid in the category of
+endofunctors.</p>
+
+<p>How do we map this more concretely to Haskell?</p>
+
+<p>Here we have to roll with more rigor.  Here’s the categorical definition of
+monoids: a triple $(S, \mu, \nu)$, where</p>
+
+<ul>
+  <li>$\exists S$ an object from a category $C$</li>
+  <li>$\exists \mu: S \times S \to S$</li>
+  <li>$\exists \nu: I<em>{C} \to S$ for $I</em>{C}$ the identity functor on $C$</li>
+</ul>
+
+<p>and where $\mu$ and $\nu$ have the familiar associativity and identity laws.</p>
+
+<p>In Haskell we only deal with the category, <em>Hask</em>, which contains Haskell types
+as objects and Haskell functions as morphisms.</p>
+
+<p>An endofunctor on <em>Hask</em> is a Haskell <code>Functor</code>.  A monad on <em>Hask</em> is thus a
+triple <code>(m, (&gt;=&gt;), return)</code>, where</p>
+
+<ul>
+  <li>some particular <code>Functor m</code></li>
+  <li><code>(&gt;=&gt;) :: (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c</code></li>
+  <li><code>return :: a -&gt; m a</code></li>
+</ul>
+
+<p>So we can roll a more general <code>CategoricalMonoid</code> typeclass, using existing
+monad function for convenience:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="haskell"><span class="line"><span class="kr">import</span> <span class="nn">Control.Monad</span>
+</span><span class="line">
+</span><span class="line"><span class="kr">class</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">CategoricalMonoid</span> <span class="n">m</span> <span class="kr">where</span>
+</span><span class="line">  <span class="n">mempty</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
+</span><span class="line">  <span class="n">mempty</span> <span class="ow">=</span> <span class="n">return</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">mappend</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">c</span>
+</span><span class="line">  <span class="n">mappend</span> <span class="ow">=</span> <span class="p">(</span><span class="o">&gt;=&gt;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>And for a concrete <code>m</code> (pick your favorite), the instances are free:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="haskell"><span class="line"><span class="kr">instance</span> <span class="kt">CategoricalMonoid</span> <span class="kt">[]</span>
+</span><span class="line"><span class="kr">instance</span> <span class="kt">CategoricalMonoid</span> <span class="kt">Maybe</span>
+</span><span class="line"><span class="kr">instance</span> <span class="kt">CategoricalMonoid</span> <span class="p">(</span><span class="kt">Either</span> <span class="n">a</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Some examples:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="haskell"><span class="line"><span class="o">&gt;</span> <span class="n">mappend</span> <span class="p">(</span><span class="kt">Just</span> <span class="o">.</span> <span class="n">succ</span><span class="p">)</span> <span class="p">(</span><span class="kt">Just</span> <span class="o">.</span> <span class="n">succ</span><span class="p">)</span> <span class="mi">0</span>
+</span><span class="line"><span class="kt">Just</span> <span class="mi">2</span>
+</span><span class="line">
+</span><span class="line"><span class="o">&gt;</span> <span class="n">mappend</span> <span class="p">(</span><span class="kt">Just</span> <span class="o">.</span> <span class="n">succ</span><span class="p">)</span> <span class="kt">Nothing</span> <span class="mi">0</span>
+</span><span class="line"><span class="kt">Nothing</span>
+</span><span class="line">
+</span><span class="line"><span class="o">&gt;</span> <span class="n">mappend</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">])</span> <span class="n">mempty</span> <span class="mi">0</span>
+</span><span class="line"><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><em>So practical</em>.  What’s the problem?</p>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+      
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/category-theory/'>category-theory</a>, <a class='category' href='/blog/categories/haskell/'>haskell</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2014/07/07/automasymbolic-differentiation/" title="Previous Post: Automasymbolic Differentiation">&laquo; Automasymbolic Differentiation</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  &copy; 2014 Jared Tobin
+  <span class="credit" style="float: right">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'] ],
+      displayMath: [ ['$$', '$$']],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  });
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+</body>
+</html>

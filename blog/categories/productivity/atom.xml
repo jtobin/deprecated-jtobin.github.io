@@ -4,7 +4,7 @@
   <title><![CDATA[Category: productivity | jtobin.ca]]></title>
   <link href="http://jtobin.ca/blog/categories/productivity/atom.xml" rel="self"/>
   <link href="http://jtobin.ca/"/>
-  <updated>2014-07-08T00:09:01-02:30</updated>
+  <updated>2014-12-03T14:16:37+13:00</updated>
   <id>http://jtobin.ca/</id>
   <author>
     <name><![CDATA[Jared Tobin]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Notes On Another Guy's Notes]]></title>
-    <link href="http://jtobin.ca/blog/2014/03/06/notes-on-high-performance-browser-networking/"/>
-    <updated>2014-03-06T18:52:20-03:30</updated>
-    <id>http://jtobin.ca/blog/2014/03/06/notes-on-high-performance-browser-networking</id>
+    <link href="http://jtobin.ca/blog/2014/03/07/notes-on-high-performance-browser-networking/"/>
+    <updated>2014-03-07T11:22:20+13:00</updated>
+    <id>http://jtobin.ca/blog/2014/03/07/notes-on-high-performance-browser-networking</id>
     <content type="html"><![CDATA[<p>I recently bought Ilya Grigorik’s <a href="http://www.amazon.com/High-Performance-Browser-Networking-performance/dp/1449344763">High Performance Browser Networking</a>, which is an excellent book.  Also excellent is that Ilya wrote <a href="http://www.igvita.com/2013/09/29/retrospective-high-performance-browser-networking/">a great retrospective</a> on his book-writing process.  </p>
 
 <p>He made a few noteworthy points about the whole endeavour:</p>
@@ -52,7 +52,7 @@
   <entry>
     <title type="html"><![CDATA[The Unreasonable Effectiveness of Habit]]></title>
     <link href="http://jtobin.ca/blog/2014/01/27/the-unreasonable-effectiveness-of-habit/"/>
-    <updated>2014-01-27T01:11:16-03:30</updated>
+    <updated>2014-01-27T17:41:16+13:00</updated>
     <id>http://jtobin.ca/blog/2014/01/27/the-unreasonable-effectiveness-of-habit</id>
     <content type="html"><![CDATA[<p>Exactly 41 days ago I started a project called <a href="http://750words.com">750 Words</a>,
 which is simply a habit of writing a meagre 750 words every day.  They can be
@@ -126,9 +126,9 @@ and <a href="http://research.google.com/pubs/archive/35179.pdf">data</a> are wel
   
   <entry>
     <title type="html"><![CDATA[Managing Learning as a Side Project]]></title>
-    <link href="http://jtobin.ca/blog/2013/12/19/side-projects/"/>
-    <updated>2013-12-19T22:42:02-03:30</updated>
-    <id>http://jtobin.ca/blog/2013/12/19/side-projects</id>
+    <link href="http://jtobin.ca/blog/2013/12/20/side-projects/"/>
+    <updated>2013-12-20T15:12:02+13:00</updated>
+    <id>http://jtobin.ca/blog/2013/12/20/side-projects</id>
     <content type="html"><![CDATA[<p>I regularly find myself wanting to learn too many things at once.  This might
 be justifiable in some sense; there’s an awful lot out there to learn.  Often,
 skimming over some topic or other feels like enough to develop a sufficiently

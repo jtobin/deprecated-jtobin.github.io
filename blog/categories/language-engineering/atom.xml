@@ -4,7 +4,7 @@
   <title><![CDATA[Category: language-engineering | jtobin.ca]]></title>
   <link href="http://jtobin.ca/blog/categories/language-engineering/atom.xml" rel="self"/>
   <link href="http://jtobin.ca/"/>
-  <updated>2014-07-08T00:09:01-02:30</updated>
+  <updated>2014-12-03T14:16:37+13:00</updated>
   <id>http://jtobin.ca/</id>
   <author>
     <name><![CDATA[Jared Tobin]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Automasymbolic Differentiation]]></title>
-    <link href="http://jtobin.ca/blog/2014/07/06/automasymbolic-differentiation/"/>
-    <updated>2014-07-06T21:38:55-02:30</updated>
-    <id>http://jtobin.ca/blog/2014/07/06/automasymbolic-differentiation</id>
+    <link href="http://jtobin.ca/blog/2014/07/07/automasymbolic-differentiation/"/>
+    <updated>2014-07-07T12:08:55+12:00</updated>
+    <id>http://jtobin.ca/blog/2014/07/07/automasymbolic-differentiation</id>
     <content type="html"><![CDATA[<p>Automatic differentiation is one of those things that’s famous for not being as
 famous as it should be (uh..).  It’s useful, it’s convenient, and yet fewer
 know about it than one would think.  <a href="http://alexey.radul.name/ideas/2013/introduction-to-automatic-differentiation/">This article</a>
@@ -287,9 +287,9 @@ we can cut down the size of the syntax we have to traverse substantially.</p>
   
   <entry>
     <title type="html"><![CDATA[Sharing in Haskell EDSLs]]></title>
-    <link href="http://jtobin.ca/blog/2014/05/29/sharing-in-haskell-edsls/"/>
-    <updated>2014-05-29T21:07:53-02:30</updated>
-    <id>http://jtobin.ca/blog/2014/05/29/sharing-in-haskell-edsls</id>
+    <link href="http://jtobin.ca/blog/2014/05/30/sharing-in-haskell-edsls/"/>
+    <updated>2014-05-30T11:37:53+12:00</updated>
+    <id>http://jtobin.ca/blog/2014/05/30/sharing-in-haskell-edsls</id>
     <content type="html"><![CDATA[<p>Lately I’ve been trying to do some magic by way of nonstandard interpretations
 of abstract syntax.  One of the things that I’ve managed to grok along the way
 has been the problem of <em>sharing</em> in deeply-embedded languages.</p>

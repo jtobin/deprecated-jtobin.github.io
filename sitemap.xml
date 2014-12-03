@@ -1,67 +1,73 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://jtobin.ca/blog/2013/12/16/a-new-blog/</loc>
-        <lastmod>2014-05-26T03:15:35-02:30</lastmod>
+        <loc>http://jtobin.ca/blog/2013/12/17/a-new-blog/</loc>
+        <lastmod>2014-05-26T17:45:35+12:00</lastmod>
     </url>
     <url>
-        <loc>http://jtobin.ca/blog/2013/12/19/side-projects/</loc>
-        <lastmod>2014-05-26T03:15:35-02:30</lastmod>
+        <loc>http://jtobin.ca/blog/2013/12/20/side-projects/</loc>
+        <lastmod>2014-05-26T17:45:35+12:00</lastmod>
     </url>
     <url>
         <loc>http://jtobin.ca/blog/2013/12/21/basic-ec2-management-with-ansible/</loc>
-        <lastmod>2014-05-26T03:15:35-02:30</lastmod>
+        <lastmod>2014-05-26T17:45:35+12:00</lastmod>
     </url>
     <url>
         <loc>http://jtobin.ca/blog/2014/01/08/measures-and-continuations/</loc>
-        <lastmod>2014-05-26T03:15:35-02:30</lastmod>
+        <lastmod>2014-05-26T17:45:35+12:00</lastmod>
     </url>
     <url>
         <loc>http://jtobin.ca/blog/2014/01/27/the-unreasonable-effectiveness-of-habit/</loc>
-        <lastmod>2014-05-26T03:15:35-02:30</lastmod>
+        <lastmod>2014-05-26T17:45:35+12:00</lastmod>
     </url>
     <url>
-        <loc>http://jtobin.ca/blog/2014/03/06/notes-on-high-performance-browser-networking/</loc>
-        <lastmod>2014-05-26T03:15:35-02:30</lastmod>
+        <loc>http://jtobin.ca/blog/2014/03/07/notes-on-high-performance-browser-networking/</loc>
+        <lastmod>2014-05-26T17:45:35+12:00</lastmod>
     </url>
     <url>
-        <loc>http://jtobin.ca/blog/2014/03/08/property-testing-in-ruby/</loc>
-        <lastmod>2014-05-26T03:15:35-02:30</lastmod>
+        <loc>http://jtobin.ca/blog/2014/03/09/property-testing-in-ruby/</loc>
+        <lastmod>2014-05-26T17:45:35+12:00</lastmod>
     </url>
     <url>
-        <loc>http://jtobin.ca/blog/2014/03/16/sampling-functions-vs-generative-models/</loc>
-        <lastmod>2014-05-26T03:15:35-02:30</lastmod>
+        <loc>http://jtobin.ca/blog/2014/03/17/sampling-functions-vs-generative-models/</loc>
+        <lastmod>2014-05-26T17:45:35+12:00</lastmod>
     </url>
     <url>
-        <loc>http://jtobin.ca/blog/2014/05/29/sharing-in-haskell-edsls/</loc>
-        <lastmod>2014-06-01T04:01:27-02:30</lastmod>
+        <loc>http://jtobin.ca/blog/2014/05/30/sharing-in-haskell-edsls/</loc>
+        <lastmod>2014-06-01T18:31:27+12:00</lastmod>
     </url>
     <url>
         <loc>http://jtobin.ca/blog/2014/06/01/quick-remote-pairing/</loc>
-        <lastmod>2014-06-01T08:57:05-02:30</lastmod>
+        <lastmod>2014-06-01T23:27:05+12:00</lastmod>
     </url>
     <url>
-        <loc>http://jtobin.ca/blog/2014/07/06/automasymbolic-differentiation/</loc>
-        <lastmod>2014-07-08T00:08:57-02:30</lastmod>
+        <loc>http://jtobin.ca/blog/2014/07/07/automasymbolic-differentiation/</loc>
+        <lastmod>2014-07-08T14:38:57+12:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://jtobin.ca/blog/2014/12/03/monads-are-just-monoids-in-the-category-of-endofunctors/
+        </loc>
+        <lastmod>2014-12-03T14:16:17+13:00</lastmod>
     </url>
     <url>
         <loc>http://jtobin.ca/404.html</loc>
-        <lastmod>2014-05-26T03:15:35-02:30</lastmod>
+        <lastmod>2014-05-26T17:45:35+12:00</lastmod>
     </url>
     <url>
         <loc>http://jtobin.ca/about/</loc>
-        <lastmod>2014-05-31T07:03:03-02:30</lastmod>
+        <lastmod>2014-05-31T21:33:03+12:00</lastmod>
     </url>
     <url>
         <loc>http://jtobin.ca/blog/archives/</loc>
-        <lastmod>2014-07-08T00:08:57-02:30</lastmod>
+        <lastmod>2014-12-03T14:16:17+13:00</lastmod>
     </url>
     <url>
         <loc>http://jtobin.ca/</loc>
-        <lastmod>2014-07-08T00:08:57-02:30</lastmod>
+        <lastmod>2014-12-03T14:16:17+13:00</lastmod>
     </url>
     <url>
         <loc>http://jtobin.ca/robots.txt</loc>
-        <lastmod>2014-05-26T03:15:35-02:30</lastmod>
+        <lastmod>2014-05-26T17:45:35+12:00</lastmod>
     </url>
 </urlset>

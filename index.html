@@ -9,8 +9,8 @@
   <meta name="author" content="Jared Tobin">
 
   
-  <meta name="description" content="Automatic differentiation is one of those things that’s famous for not being as
-famous as it should be (uh..). It’s useful, it’s convenient, and yet &hellip;">
+  <meta name="description" content="The title of this post is a famous quote in Haskell circles. Supposedly when
+someone, somewhere exclaimed that they had trouble understanding monads &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,7 +66,173 @@ famous as it should be (uh..). It’s useful, it’s convenient, and yet &hellip
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/07/06/automasymbolic-differentiation/">Automasymbolic Differentiation</a></h1>
+        <h1 class="entry-title"><a href="/blog/2014/12/03/monads-are-just-monoids-in-the-category-of-endofunctors/">Monads Are Just Monoids in the Category of Endofunctors</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The title of this post is a famous quote in Haskell circles.  Supposedly when
+someone, somewhere exclaimed that they had trouble understanding monads, they
+were met with a (tongue-in-cheek) reply of “monads are just monoids in the
+category of endofunctors, what’s the problem?”</p>
+
+<p>Does that make sense?  Yeah it does.  The category theory version is actually
+surprisingly easy to understand.</p>
+
+<p>First, <a href="http://en.wikipedia.org/wiki/Monoid">monoids</a> from the algebraic point
+of view.  I think you probably have to grok these before understanding the
+above quote becomes ‘surprisingly easy’.</p>
+
+<p>Formally, a monoid is a triple $(S, +, e)$ where</p>
+
+<ul>
+  <li>$\exists S$ a set</li>
+  <li>$\exists +: S \times S \to S$</li>
+  <li>$\exists e \in S$</li>
+</ul>
+
+<p>such that</p>
+
+<ul>
+  <li>$\forall a, b, c \in S: (a + b) + c = a + (b + c)$ (associativity)</li>
+  <li>$\forall a \in S: e + a = a + e = e$ (identity).</li>
+</ul>
+
+<p>Loosely, a monoid is a i) collection of things, ii) an associative way to glue
+those things together, and iii) an identity element.  Good examples of monoids
+are</p>
+
+<ul>
+  <li>(the integers, addition, 0)</li>
+  <li>(the integers, multiplication, 1)</li>
+  <li>(lists, concatenation, the empty list)</li>
+</ul>
+
+<p>The category theory version of monoids is more-or-less the same idea, but more
+general. I claim that the above algebraic concept of monoids is sufficient to
+understand the necessary correspondence to monads; for the category theory
+definition of monoids you can go to the
+<a href="http://en.wikipedia.org/wiki/Monoid_%28category_theory%29">Wikipedia</a> page.</p>
+
+<p>A <a href="http://en.wikipedia.org/wiki/Monad_(category_theory)">monad</a> on some
+category $C$ is a triple $(T, \mu, \nu)$ where</p>
+
+<ul>
+  <li>$\exists T$ an endofunctor on $C$</li>
+  <li>$\exists \mu: T \times T \to T$</li>
+  <li>$\exists \nu: I<em>{C} \to T$ where $I</em>{C}$ is the identity functor on $C$</li>
+</ul>
+
+<p>such that</p>
+
+<ul>
+  <li>$\mu(\mu(T \times T) \times T) = \mu(T \times \mu(T \times T))$ (associativity)</li>
+  <li>$\mu(\nu(T)) = \mu(T(\nu)) = T$ (identity).</li>
+</ul>
+
+<p>You don’t have to even know what an endofunctor or category is in order to see
+the general correspondence; swap in ‘endofunctor’ for ‘set’ and you’re most of
+the way there.  A monad is, unironically, just a monoid in the category of
+endofunctors.</p>
+
+<p>How do we map this more concretely to Haskell?</p>
+
+<p>Here we have to roll with more rigor.  Here’s the categorical definition of
+monoids: a triple $(S, \mu, \nu)$, where</p>
+
+<ul>
+  <li>$\exists S$ an object from a category $C$</li>
+  <li>$\exists \mu: S \times S \to S$</li>
+  <li>$\exists \nu: I<em>{C} \to S$ for $I</em>{C}$ the identity functor on $C$</li>
+</ul>
+
+<p>and where $\mu$ and $\nu$ have the familiar associativity and identity laws.</p>
+
+<p>In Haskell we only deal with the category, <em>Hask</em>, which contains Haskell types
+as objects and Haskell functions as morphisms.</p>
+
+<p>An endofunctor on <em>Hask</em> is a Haskell <code>Functor</code>.  A monad on <em>Hask</em> is thus a
+triple <code>(m, (&gt;=&gt;), return)</code>, where</p>
+
+<ul>
+  <li>some particular <code>Functor m</code></li>
+  <li><code>(&gt;=&gt;) :: (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c</code></li>
+  <li><code>return :: a -&gt; m a</code></li>
+</ul>
+
+<p>So we can roll a more general <code>CategoricalMonoid</code> typeclass, using existing
+monad function for convenience:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="haskell"><span class="line"><span class="kr">import</span> <span class="nn">Control.Monad</span>
+</span><span class="line">
+</span><span class="line"><span class="kr">class</span> <span class="kt">Monad</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">CategoricalMonoid</span> <span class="n">m</span> <span class="kr">where</span>
+</span><span class="line">  <span class="n">mempty</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">a</span>
+</span><span class="line">  <span class="n">mempty</span> <span class="ow">=</span> <span class="n">return</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">mappend</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">c</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">m</span> <span class="n">c</span>
+</span><span class="line">  <span class="n">mappend</span> <span class="ow">=</span> <span class="p">(</span><span class="o">&gt;=&gt;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>And for a concrete <code>m</code> (pick your favorite), the instances are free:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="haskell"><span class="line"><span class="kr">instance</span> <span class="kt">CategoricalMonoid</span> <span class="kt">[]</span>
+</span><span class="line"><span class="kr">instance</span> <span class="kt">CategoricalMonoid</span> <span class="kt">Maybe</span>
+</span><span class="line"><span class="kr">instance</span> <span class="kt">CategoricalMonoid</span> <span class="p">(</span><span class="kt">Either</span> <span class="n">a</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Some examples:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="haskell"><span class="line"><span class="o">&gt;</span> <span class="n">mappend</span> <span class="p">(</span><span class="kt">Just</span> <span class="o">.</span> <span class="n">succ</span><span class="p">)</span> <span class="p">(</span><span class="kt">Just</span> <span class="o">.</span> <span class="n">succ</span><span class="p">)</span> <span class="mi">0</span>
+</span><span class="line"><span class="kt">Just</span> <span class="mi">2</span>
+</span><span class="line">
+</span><span class="line"><span class="o">&gt;</span> <span class="n">mappend</span> <span class="p">(</span><span class="kt">Just</span> <span class="o">.</span> <span class="n">succ</span><span class="p">)</span> <span class="kt">Nothing</span> <span class="mi">0</span>
+</span><span class="line"><span class="kt">Nothing</span>
+</span><span class="line">
+</span><span class="line"><span class="o">&gt;</span> <span class="n">mappend</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">])</span> <span class="n">mempty</span> <span class="mi">0</span>
+</span><span class="line"><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><em>So practical</em>.  What’s the problem?</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2014/07/07/automasymbolic-differentiation/">Automasymbolic Differentiation</a></h1>
       
     
     
@@ -468,7 +634,7 @@ tmux prefix to C-s).</p>
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/05/29/sharing-in-haskell-edsls/">Sharing in Haskell EDSLs</a></h1>
+        <h1 class="entry-title"><a href="/blog/2014/05/30/sharing-in-haskell-edsls/">Sharing in Haskell EDSLs</a></h1>
       
     
     
@@ -1002,7 +1168,7 @@ some gists.</p>
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/03/16/sampling-functions-vs-generative-models/">Sampling Functions and Generative Models</a></h1>
+        <h1 class="entry-title"><a href="/blog/2014/03/17/sampling-functions-vs-generative-models/">Sampling Functions and Generative Models</a></h1>
       
     
     
@@ -1097,7 +1263,7 @@ in some way; a sampling function does not.</p>
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/03/08/property-testing-in-ruby/">Property Testing in Ruby</a></h1>
+        <h1 class="entry-title"><a href="/blog/2014/03/09/property-testing-in-ruby/">Property Testing in Ruby</a></h1>
       
     
     
@@ -1387,7 +1553,7 @@ have.  Rantly is not quite QuickCheck, but it’s still a joy to use.</p>
   <header>
     
       <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2014/03/06/notes-on-high-performance-browser-networking/">Notes on Another Guy&#8217;s Notes</a></h1>
+        <h1 class="entry-title"><a href="/blog/2014/03/07/notes-on-high-performance-browser-networking/">Notes on Another Guy&#8217;s Notes</a></h1>
       
     
     
@@ -1566,62 +1732,6 @@ globally-distributed network of servers that are eager to do your bidding.</p>
     <footer>
       <a rel="full-article" href="/blog/2013/12/21/basic-ec2-management-with-ansible/">Read on &rarr;</a>
     </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2013/12/19/side-projects/">Managing Learning as a Side Project</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I regularly find myself wanting to learn too many things at once.  This might
-be justifiable in some sense; there’s an awful lot out there to learn.  Often,
-skimming over some topic or other feels like enough to develop a sufficiently
-high-level model of what it is or how it works.  Armed with that (dangerously
-small amount of) knowledge, however, the urge to pick up some other topic tends
-to arise..  and so the process repeats.</p>
-
-<p>This is all well and good in order to survey what’s out there, but left
-unchecked, a survey of topics is all one might get.  <em>Le dilettantisme</em> can be
-understandable, but never desirable.</p>
-
-<p>Some time ago, I decided to try restricting myself to learning only one
-particular topic for two weeks at a time, as a bit of a side project.  Think of
-it as a ‘learning sprint’, if you will.  The idea is that the time between
-iterations is sufficiently short to ensure that one can’t hunger too badly to
-switch to some other topic mid-sprint.  At the same time, each iteration is
-lengthy enough to ensure a reasonable amount of immersion and depth.</p>
-
-<p>I managed a single iteration, but due to travel and a lack of conviction about
-the whole thing, never started another.  I think I’m going to start again, but
-with a little more intent this time.</p>
-
-<p>Two weeks can be a long-as time for some topics, though, so I believe I’ll work
-in one-to-two week commitments, depending on the subject.</p>
-
-<p>To start, I’m going to choose <a href="http://zeromq.org/">0MQ</a>, a framework that I
-sort-of know and definitely love.  We’ve used it in production on a previous
-app I worked on, and I’ve even contributed to the official Ruby bindings.  But,
-I still have a lot to learn about it.</p>
-
-<p>So let’s see how it goes.</p>
-
-</div>
-  
   
 
 

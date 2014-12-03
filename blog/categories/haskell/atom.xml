@@ -4,7 +4,7 @@
   <title><![CDATA[Category: haskell | jtobin.ca]]></title>
   <link href="http://jtobin.ca/blog/categories/haskell/atom.xml" rel="self"/>
   <link href="http://jtobin.ca/"/>
-  <updated>2014-07-08T00:09:01-02:30</updated>
+  <updated>2014-12-03T14:16:37+13:00</updated>
   <id>http://jtobin.ca/</id>
   <author>
     <name><![CDATA[Jared Tobin]]></name>
@@ -14,10 +14,148 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Monads are just monoids in the category of endofunctors]]></title>
+    <link href="http://jtobin.ca/blog/2014/12/03/monads-are-just-monoids-in-the-category-of-endofunctors/"/>
+    <updated>2014-12-03T13:04:06+13:00</updated>
+    <id>http://jtobin.ca/blog/2014/12/03/monads-are-just-monoids-in-the-category-of-endofunctors</id>
+    <content type="html"><![CDATA[<p>The title of this post is a famous quote in Haskell circles.  Supposedly when
+someone, somewhere exclaimed that they had trouble understanding monads, they
+were met with a (tongue-in-cheek) reply of “monads are just monoids in the
+category of endofunctors, what’s the problem?”</p>
+
+<p>Does that make sense?  Yeah it does.  The category theory version is actually
+surprisingly easy to understand.</p>
+
+<p>First, <a href="http://en.wikipedia.org/wiki/Monoid">monoids</a> from the algebraic point
+of view.  I think you probably have to grok these before understanding the
+above quote becomes ‘surprisingly easy’.</p>
+
+<p>Formally, a monoid is a triple $(S, +, e)$ where</p>
+
+<ul>
+  <li>$\exists S$ a set</li>
+  <li>$\exists +: S \times S \to S$</li>
+  <li>$\exists e \in S$</li>
+</ul>
+
+<p>such that</p>
+
+<ul>
+  <li>$\forall a, b, c \in S: (a + b) + c = a + (b + c)$ (associativity)</li>
+  <li>$\forall a \in S: e + a = a + e = e$ (identity).</li>
+</ul>
+
+<p>Loosely, a monoid is a i) collection of things, ii) an associative way to glue
+those things together, and iii) an identity element.  Good examples of monoids
+are</p>
+
+<ul>
+  <li>(the integers, addition, 0)</li>
+  <li>(the integers, multiplication, 1)</li>
+  <li>(lists, concatenation, the empty list)</li>
+</ul>
+
+<p>The category theory version of monoids is more-or-less the same idea, but more
+general. I claim that the above algebraic concept of monoids is sufficient to
+understand the necessary correspondence to monads; for the category theory
+definition of monoids you can go to the
+<a href="http://en.wikipedia.org/wiki/Monoid_%28category_theory%29">Wikipedia</a> page.</p>
+
+<p>A <a href="http://en.wikipedia.org/wiki/Monad_(category_theory)">monad</a> on some
+category $C$ is a triple $(T, \mu, \nu)$ where</p>
+
+<ul>
+  <li>$\exists T$ an endofunctor on $C$</li>
+  <li>$\exists \mu: T \times T \to T$</li>
+  <li>$\exists \nu: I<em>{C} \to T$ where $I</em>{C}$ is the identity functor on $C$</li>
+</ul>
+
+<p>such that</p>
+
+<ul>
+  <li>$\mu(\mu(T \times T) \times T) = \mu(T \times \mu(T \times T))$ (associativity)</li>
+  <li>$\mu(\nu(T)) = \mu(T(\nu)) = T$ (identity).</li>
+</ul>
+
+<p>You don’t have to even know what an endofunctor or category is in order to see
+the general correspondence; swap in ‘endofunctor’ for ‘set’ and you’re most of
+the way there.  A monad is, unironically, just a monoid in the category of
+endofunctors.</p>
+
+<p>How do we map this more concretely to Haskell?</p>
+
+<p>Here we have to roll with more rigor.  Here’s the categorical definition of
+monoids: a triple $(S, \mu, \nu)$, where</p>
+
+<ul>
+  <li>$\exists S$ an object from a category $C$</li>
+  <li>$\exists \mu: S \times S \to S$</li>
+  <li>$\exists \nu: I<em>{C} \to S$ for $I</em>{C}$ the identity functor on $C$</li>
+</ul>
+
+<p>and where $\mu$ and $\nu$ have the familiar associativity and identity laws.</p>
+
+<p>In Haskell we only deal with the category, <em>Hask</em>, which contains Haskell types
+as objects and Haskell functions as morphisms.</p>
+
+<p>An endofunctor on <em>Hask</em> is a Haskell <code>Functor</code>.  A monad on <em>Hask</em> is thus a
+triple <code>(m, (&gt;=&gt;), return)</code>, where</p>
+
+<ul>
+  <li>some particular <code>Functor m</code></li>
+  <li><code>(&gt;=&gt;) :: (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c</code></li>
+  <li><code>return :: a -&gt; m a</code></li>
+</ul>
+
+<p>So we can roll a more general <code>CategoricalMonoid</code> typeclass, using existing
+monad function for convenience:</p>
+
+<p>``` haskell
+import Control.Monad</p>
+
+<p>class Monad m =&gt; CategoricalMonoid m where
+  mempty :: a -&gt; m a
+  mempty = return</p>
+
+<p>mappend :: (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c
+  mappend = (&gt;=&gt;)
+```</p>
+
+<p>And for a concrete <code>m</code> (pick your favorite), the instances are free:</p>
+
+<p><code>haskell
+instance CategoricalMonoid []
+instance CategoricalMonoid Maybe
+instance CategoricalMonoid (Either a)
+</code></p>
+
+<p>Some examples:</p>
+
+<p>```
+&gt; mappend (Just . succ) (Just . succ) 0
+Just 2</p>
+
+<blockquote>
+  <p>mappend (Just . succ) Nothing 0
+Nothing</p>
+</blockquote>
+
+<blockquote>
+  <p>mappend (\x -&gt; [x, x]) mempty 0
+[0, 0]
+```</p>
+</blockquote>
+
+<p><em>So practical</em>.  What’s the problem?</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Sharing in Haskell EDSLs]]></title>
-    <link href="http://jtobin.ca/blog/2014/05/29/sharing-in-haskell-edsls/"/>
-    <updated>2014-05-29T21:07:53-02:30</updated>
-    <id>http://jtobin.ca/blog/2014/05/29/sharing-in-haskell-edsls</id>
+    <link href="http://jtobin.ca/blog/2014/05/30/sharing-in-haskell-edsls/"/>
+    <updated>2014-05-30T11:37:53+12:00</updated>
+    <id>http://jtobin.ca/blog/2014/05/30/sharing-in-haskell-edsls</id>
     <content type="html"><![CDATA[<p>Lately I’ve been trying to do some magic by way of nonstandard interpretations
 of abstract syntax.  One of the things that I’ve managed to grok along the way
 has been the problem of <em>sharing</em> in deeply-embedded languages.</p>
